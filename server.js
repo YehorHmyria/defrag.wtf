@@ -32,10 +32,22 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !GEMINI_API_KEY || !DEFRAG_SECRET) {
 }
 
 // Initialize clients
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-const rssParser = new Parser();
+let supabase;
+let genAI;
+let model;
+const rssParser = new Parser(); // rssParser remains a const
+
+// Assuming 'isConfigured' is implicitly true after the env var check,
+// or that this block is meant to be the initialization.
+// The provided snippet starts with "clif (isConfigured) {" which seems like a typo or incomplete code.
+// Interpreting this as the main initialization block, and assuming the intent was to
+// initialize these variables if the configuration is valid.
+// The original code initialized them directly, so we'll do the same, but with the new model.
+supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+// Using gemini-pro as stable fallback
+model = genAI.getGenerativeModel({ model: "gemini-pro" });
+console.log('✅ All clients initialized successfully');
 
 // Express app
 const app = express();
