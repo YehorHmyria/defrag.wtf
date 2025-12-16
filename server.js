@@ -6,6 +6,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import Parser from "rss-parser";
 import axios from "axios";
 import * as cheerio from "cheerio";
+import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables
 dotenv.config();
@@ -33,6 +39,9 @@ const rssParser = new Parser();
 
 // Express app
 const app = express();
+
+// Enable CORS for frontend development
+app.use(cors());
 
 // RSS Feed sources
 const RSS_FEEDS = [
@@ -303,6 +312,34 @@ app.get("/health", (req, res) => {
 });
 
 /**
+ * Get articles endpoint for frontend
+ */
+app.get("/api/articles", async (req, res) => {
+  if (!isConfigured) {
+    return res.status(503).json({ 
+      error: "Service not configured",
+      missingVariables: missingVars 
+    });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("defrag_articles")
+      .select("*")
+      .order("published_at", { ascending: false })
+      .limit(50);
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch articles" });
+  }
+});
+
+/**
  * Manual trigger endpoint
  */
 app.get("/api/defrag-now", async (req, res) => {
@@ -338,6 +375,14 @@ cron.schedule(
     timezone: "UTC",
   }
 );
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
+// Catch-all route to serve index.html for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
+});
 
 // Start server
 const server = app.listen(PORT, () => {
