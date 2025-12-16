@@ -2,7 +2,7 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import ImpactBar from './ImpactBar';
 
-const ArticleCard = ({ article, isHero = false }) => {
+const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) => {
   const { title, summary, short_tag, impact_score, source_name, published_at, original_url } = article;
   
   const date = new Date(published_at).toLocaleDateString('en-US', {
@@ -12,9 +12,10 @@ const ArticleCard = ({ article, isHero = false }) => {
   });
 
   const getTagColor = (tag) => {
+    if (!tag) return 'text-bright-yellow';
     const t = tag.toUpperCase();
     if (['FAIL', 'CRASH', 'HACKED', 'LEAK'].includes(t)) return 'text-hot-pink';
-    if (['AI', 'LAUNCH', 'UPDATE'].includes(t)) return 'text-neon-cyan';
+    if (['AI', 'LAUNCH', 'UPDATE', 'RELEASE', 'BENCHMARK'].includes(t)) return 'text-neon-cyan';
     return 'text-bright-yellow';
   };
 
@@ -30,9 +31,15 @@ const ArticleCard = ({ article, isHero = false }) => {
           <span>{date}</span>
         </div>
         
-        <span className={`font-bold ${getTagColor(short_tag)}`}>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            onTagClick && onTagClick(short_tag);
+          }}
+          className={`font-bold hover:underline cursor-pointer ${getTagColor(short_tag)}`}
+        >
           &lt; {short_tag} /&gt;
-        </span>
+        </button>
       </div>
 
       {/* Title */}
@@ -55,10 +62,22 @@ const ArticleCard = ({ article, isHero = false }) => {
       </div>
       
       {/* Footer */}
-      <div className="mt-6 flex justify-between items-end gap-4">
+      <div className="mt-6 flex justify-between items-end gap-4 relative z-10">
          <ImpactBar score={impact_score} />
-         <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-neon-cyan">
-            <ExternalLink size={16} />
+         
+         <div className="flex items-center gap-4">
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                onSave && onSave(article);
+              }}
+              className={`text-xs font-mono px-2 py-1 border transition-colors ${isSaved ? 'bg-neon-cyan text-black border-neon-cyan' : 'border-neutral-700 text-neutral-500 hover:border-neon-cyan hover:text-neon-cyan'}`}
+            >
+              [ {isSaved ? 'SAVED' : 'SAVE'} ]
+            </button>
+            <div className="text-neon-cyan opacity-50 group-hover:opacity-100 transition-opacity">
+                <ExternalLink size={16} />
+            </div>
          </div>
       </div>
     </article>

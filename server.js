@@ -264,8 +264,8 @@ async function runDefragProcess() {
   let savedCount = 0;
   let errorCount = 0;
 
-  // Calculate 24 hours ago
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  // Calculate 48 hours ago
+  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
 
   for (const feed of RSS_FEEDS) {
     try {
@@ -275,7 +275,7 @@ async function runDefragProcess() {
       // Filter recent articles
       const recentArticles = rssFeed.items.filter((item) => {
         const pubDate = new Date(item.pubDate || item.isoDate);
-        return pubDate > twentyFourHoursAgo;
+        return pubDate > fortyEightHoursAgo;
       });
 
       console.log(`   Found ${recentArticles.length} recent articles`);
@@ -316,11 +316,8 @@ async function runDefragProcess() {
             errorCount++;
             continue;
           }
-          // Filter by threshold (Strict Senior Engineer Mode)
-          if (defragmented.impact_score <= 65) {
-             console.log(`   🗑️  Skipping Noise: ${defragmented.title} [Score: ${defragmented.impact_score}]`);
-             continue;
-          }
+          // REMOVED: Filter by threshold (Strict Senior Engineer Mode) - We now save trash for the trash feed
+          // if (defragmented.impact_score <= 65) { ... }
 
           // Insert into Supabase
           const { data, error } = await supabase
@@ -396,12 +393,31 @@ app.get("/api/articles", async (req, res) => {
     });
   }
 
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const type = req.query.type || 'signal'; // 'signal' | 'trash'
+  
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  // 48 Hours threshold
+  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("defrag_articles")
       .select("*")
+      .gte("published_at", fortyEightHoursAgo)
       .order("published_at", { ascending: false })
-      .limit(50);
+      .range(from, to);
+
+    if (type === 'signal') {
+      query = query.gte("impact_score", 70);
+    } else if (type === 'trash') {
+      query = query.lt("impact_score", 70);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       return res.status(500).json({ error: error.message });
