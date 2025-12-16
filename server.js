@@ -2,7 +2,7 @@ import express from "express";
 import cron from "node-cron";
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import Parser from "rss-parser";
 import axios from "axios";
 import * as cheerio from "cheerio";
@@ -20,14 +20,14 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const DEFRAG_SECRET = process.env.DEFRAG_SECRET;
 
 // Validate required environment variables
 const missingVars = [];
 if (!SUPABASE_URL) missingVars.push("SUPABASE_URL");
 if (!SUPABASE_ANON_KEY) missingVars.push("SUPABASE_ANON_KEY");
-if (!GEMINI_API_KEY) missingVars.push("GEMINI_API_KEY");
+if (!GROQ_API_KEY) missingVars.push("GROQ_API_KEY");
 if (!DEFRAG_SECRET) missingVars.push("DEFRAG_SECRET");
 
 const isConfigured = missingVars.length === 0;
@@ -42,17 +42,14 @@ if (!isConfigured) {
 
 // Initialize clients
 let supabase;
-let genAI;
-let model;
+let groq;
 const rssParser = new Parser();
 
 if (isConfigured) {
   try {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    // Use specific model version to avoid 404s
-    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" });
-    console.log('✅ All clients initialized successfully');
+    groq = new Groq({ apiKey: GROQ_API_KEY });
+    console.log('✅ All clients initialized successfully (Groq + Supabase)');
   } catch (err) {
     console.error("❌ Failed to initialize clients:", err);
   }
@@ -157,20 +154,23 @@ async function scrapeArticleContent(url) {
  */
 async function defragmentWithAI(articleText, title, source) {
   try {
-    const prompt = `${DEFRAG_SYSTEM_PROMPT}
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: DEFRAG_SYSTEM_PROMPT + "\n\nYou MUST return ONLY valid JSON."
+        },
+        {
+          role: "user",
+          content: `SOURCE: ${source}\nORIGINAL TITLE: ${title}\nARTICLE TEXT:\n${articleText}`
+        }
+      ],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.5,
+      response_format: { type: "json_object" }, 
+    });
 
----
-SOURCE: ${source}
-ORIGINAL TITLE: ${title}
-ARTICLE TEXT:
-${articleText}
----
-
-Analyze and defragment this article. Return ONLY the JSON response, nothing else.`;
-
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    let text = completion.choices[0]?.message?.content || "";
 
     // Clean potential markdown formatting
     text = text
@@ -200,7 +200,6 @@ Analyze and defragment this article. Return ONLY the JSON response, nothing else
       throw new Error("Invalid impact_score");
     }
 
-    return defragmented;
     return defragmented;
   } catch (error) {
     console.error(`❌ AI processing failed:`, error.message);
