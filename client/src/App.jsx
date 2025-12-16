@@ -7,6 +7,7 @@ import LoadingState from './components/LoadingState';
 import BootLoader from './components/BootLoader';
 import SearchModal from './components/SearchModal';
 import ControlBar from './components/ControlBar';
+import InstallPrompt from './components/InstallPrompt';
 
 function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -268,6 +269,9 @@ function App() {
 
       {/* Manual Trigger (Fixed Bottom Right) */}
       <DefragButton onDefragComplete={fetchArticles} />
+      
+      {/* PWA Install Prompt */}
+      <InstallPrompt />
     </div>
   );
 }
