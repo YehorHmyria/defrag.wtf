@@ -1,0 +1,33 @@
+{
+  "name": "defrag-wtf-backend",
+  "version": "1.0.0",
+  "description": "Brutalist tech news aggregator - strips marketing BS to raw facts using AI",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "tech-news",
+    "aggregator",
+    "ai",
+    "gemini",
+    "brutalist"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "axios": "^1.6.5",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.3",
+    "rss-parser": "^3.13.0"
+  }
+}
