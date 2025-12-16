@@ -1,9 +1,10 @@
-import React from 'react';
+import logo from '../assets/defrag-logo.png';
 
 const GlitchHeader = () => {
   return (
     <header className="py-8 flex justify-between items-center border-b border-neutral-800 bg-dedsec-black/80 backdrop-blur-sm sticky top-0 z-40">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        <img src={logo} alt="Defrag Logo" className="w-12 h-12 object-contain" />
         <h1 className="text-3xl font-heading text-white select-none animate-glitch">
           dEFRaG_wTF<span className="text-neon-cyan animate-blink">_</span>
         </h1>
