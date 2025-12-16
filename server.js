@@ -201,10 +201,45 @@ Analyze and defragment this article. Return ONLY the JSON response, nothing else
     }
 
     return defragmented;
+    return defragmented;
   } catch (error) {
     console.error(`❌ AI processing failed:`, error.message);
-    return null;
+    console.log(`⚠️  Using Fallback (Mock Mode) to process article...`);
+    return fallbackDefrag(articleText, title, source);
   }
+}
+
+/**
+ * Fallback heuristics when AI is down
+ */
+function fallbackDefrag(text, title, source) {
+  // 1. Extract first 3 sentences for summary
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text.substring(0, 200)];
+  const summary = sentences.slice(0, 3).join(" ").substring(0, 300).trim();
+
+  // 2. Determine impact score based on keywords
+  let impact_score = Math.floor(Math.random() * 40) + 30; // Base 30-70
+  const highImpact = ["launch", "hack", "breach", "announce", "raise", "million", "billion"];
+  const lowImpact = ["rumor", "maybe", "could", "update", "patch"];
+
+  if (highImpact.some(w => title.toLowerCase().includes(w))) impact_score += 20;
+  if (lowImpact.some(w => title.toLowerCase().includes(w))) impact_score -= 10;
+  if (impact_score > 99) impact_score = 99;
+
+  // 3. Determine tag
+  let short_tag = "NEWS";
+  if (title.toLowerCase().includes("ai")) short_tag = "AI";
+  else if (title.toLowerCase().includes("raise") || title.includes("$")) short_tag = "MONEY";
+  else if (title.toLowerCase().includes("hack") || title.toLowerCase().includes("breach")) short_tag = "HACKED";
+  else if (title.toLowerCase().includes("pixel") || title.toLowerCase().includes("iphone")) short_tag = "DEVICE";
+  else if (title.toLowerCase().includes("layoff")) short_tag = "FIRED";
+
+  return {
+    title: title.substring(0, 60), // Truncate title
+    summary: summary || "No summary available in fallback mode.",
+    short_tag: short_tag,
+    impact_score: impact_score
+  };
 }
 
 /**
