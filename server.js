@@ -165,7 +165,7 @@ async function defragmentWithAI(articleText, title, source) {
           content: `SOURCE: ${source}\nORIGINAL TITLE: ${title}\nARTICLE TEXT:\n${articleText}`
         }
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.1-8b-instant",
       temperature: 0.5,
       response_format: { type: "json_object" }, 
     });
@@ -281,25 +281,26 @@ async function runDefragProcess() {
             )}...`
           );
 
-          // Scrape full content
-          const articleContent = await scrapeArticleContent(article.link);
-          if (!articleContent || articleContent.length < 100) {
-            console.log("   ⚠️  Insufficient content, skipping");
-            errorCount++;
-            continue;
-          }
+    // Scrape full content
+    const articleContent = await scrapeArticleContent(article.link);
+    if (!articleContent || articleContent.length < 100) {
+      console.log("   ⚠️  Insufficient content, skipping");
+      errorCount++;
+      continue;
+    }
 
-          // Process with AI (5-second delay for rate limiting)
-          if (processedCount > 1) {
-            console.log("   ⏳ Waiting 5 seconds (rate limit protection)...");
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-          }
+    // Rate limiting (15 seconds delay for Groq free tier)
+    if (processedCount > 0) {
+      console.log("   ⏳ Waiting 30 seconds (rate limit protection)...");
+      await new Promise((resolve) => setTimeout(resolve, 30000));
+    }
 
-          const defragmented = await defragmentWithAI(
-            articleContent,
-            article.title || "Untitled",
-            feed.name
-          );
+    // Process with AI (Using optimized Llama 3.1 8B for speed/tokens)
+    const defragmented = await defragmentWithAI(
+      articleContent.substring(0, 8000), // Reduce context to safe tokens
+      article.title || "Untitled",
+      feed.name
+    );
 
           if (!defragmented) {
             console.log("   ❌ AI processing failed, skipping");
