@@ -70,6 +70,7 @@ const RSS_FEEDS = [
 ];
 
 // AI System Prompt - The "Vibe"
+// AI System Prompt - The "Vibe"
 const DEFRAG_SYSTEM_PROMPT = `You are Defrag.WTF, a cynical tech analyst AI. Your goal is to cut through PR and marketing BS. 
 
 Analyze the input text and extract only hard technical facts. Output language must be strictly ENGLISH. Be direct, dry, and concise.
@@ -77,17 +78,16 @@ Analyze the input text and extract only hard technical facts. Output language mu
 You MUST return ONLY valid JSON in this exact format (no markdown, no extra text):
 {
   "title": "Short, punchy headline in English (max 60 chars). No clickbait.",
-  "summary": "3 short bullet points of raw facts. Use technical terms correctly.",
+  "summary": ["Fact point 1", "Fact point 2", "Fact point 3"],
   "short_tag": "One English word in ALL CAPS (e.g. VAPORWARE, LAUNCH, LEAK, PATCH, HYPE, CRASH, AI, CRYPTO, FAIL)",
   "impact_score": 85
 }
 
 Rules:
 - Title must be under 60 characters
-- Summary must be 3 bullet points, separated by newlines
+- Summary must be an array of 3 distinct string points
 - Short tag must be ONE word, ALL CAPS, in English
 - Impact score is 1-100 (1=trivial, 100=industry-changing)
-- Be brutally honest about hype vs substance
 - If the article is mostly marketing fluff, make that clear in your analysis`;
 
 /**
@@ -146,7 +146,7 @@ async function scrapeArticleContent(url) {
 }
 
 /**
- * Process article with Gemini AI to defragment content
+ * Process article with AI to defragment content
  * @param {string} articleText - Full article text
  * @param {string} title - Original article title
  * @param {string} source - Source name
@@ -181,6 +181,11 @@ async function defragmentWithAI(articleText, title, source) {
     // Parse JSON
     const defragmented = JSON.parse(text);
 
+    // Handle nested summary array if present
+    if (Array.isArray(defragmented.summary)) {
+      defragmented.summary = defragmented.summary.map(s => `• ${s}`).join("\n");
+    }
+
     // Validate required fields
     if (
       !defragmented.title ||
@@ -203,8 +208,7 @@ async function defragmentWithAI(articleText, title, source) {
     return defragmented;
   } catch (error) {
     console.error(`❌ AI processing failed:`, error.message);
-    console.log(`⚠️  Using Fallback (Mock Mode) to process article...`);
-    return fallbackDefrag(articleText, title, source);
+    return null;
   }
 }
 
