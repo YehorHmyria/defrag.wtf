@@ -7,23 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        'almost-black': '#050505',
-        'neon-lime': '#ccff00',
-        'hot-pink': '#ff00ff',
-        'electric-blue': '#00ffff',
+        'dedsec-black': '#09090b',
+        'neon-cyan': '#00f0ff',
+        'hot-pink': '#ff003c',
+        'bright-yellow': '#faff00',
+        'light-gray': '#e5e7eb',
       },
       fontFamily: {
-        'heading': ['"Space Grotesk"', 'sans-serif'],
+        'heading': ['"VT323"', 'monospace'],
         'mono': ['"JetBrains Mono"', 'monospace'],
       },
       borderWidth: {
-        '3': '3px',
-        '6': '6px',
-        '8': '8px',
+        '1': '1px',
+        '2': '2px',
       },
       animation: {
-        'glitch': 'glitch 0.3s infinite',
-        'marquee': 'marquee 30s linear infinite',
+        'glitch': 'glitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite',
         'blink': 'blink 1s step-end infinite',
       },
       keyframes: {

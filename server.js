@@ -24,30 +24,39 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const DEFRAG_SECRET = process.env.DEFRAG_SECRET;
 
 // Validate required environment variables
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY || !GEMINI_API_KEY || !DEFRAG_SECRET) {
-  console.error(
-    "❌ Missing required environment variables. Check your .env file."
+const missingVars = [];
+if (!SUPABASE_URL) missingVars.push("SUPABASE_URL");
+if (!SUPABASE_ANON_KEY) missingVars.push("SUPABASE_ANON_KEY");
+if (!GEMINI_API_KEY) missingVars.push("GEMINI_API_KEY");
+if (!DEFRAG_SECRET) missingVars.push("DEFRAG_SECRET");
+
+const isConfigured = missingVars.length === 0;
+
+if (!isConfigured) {
+  console.warn(
+    "⚠️  Missing required environment variables:",
+    missingVars.join(", ")
   );
-  process.exit(1);
+  console.warn("⚠️  Server will start in degraded mode (health check only).");
 }
 
 // Initialize clients
 let supabase;
 let genAI;
 let model;
-const rssParser = new Parser(); // rssParser remains a const
+const rssParser = new Parser();
 
-// Assuming 'isConfigured' is implicitly true after the env var check,
-// or that this block is meant to be the initialization.
-// The provided snippet starts with "clif (isConfigured) {" which seems like a typo or incomplete code.
-// Interpreting this as the main initialization block, and assuming the intent was to
-// initialize these variables if the configuration is valid.
-// The original code initialized them directly, so we'll do the same, but with the new model.
-supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-// Using gemini-pro as stable fallback
-model = genAI.getGenerativeModel({ model: "gemini-pro" });
-console.log('✅ All clients initialized successfully');
+if (isConfigured) {
+  try {
+    supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    // Use specific model version to avoid 404s
+    model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" });
+    console.log('✅ All clients initialized successfully');
+  } catch (err) {
+    console.error("❌ Failed to initialize clients:", err);
+  }
+}
 
 // Express app
 const app = express();

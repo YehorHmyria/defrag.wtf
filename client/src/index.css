@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=VT323&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,26 +6,47 @@
 
 @layer base {
   body {
-    @apply bg-almost-black text-white font-mono overflow-x-hidden;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    @apply bg-dedsec-black text-white font-mono overflow-x-hidden;
+  }
+
+  /* Subtler scanline overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.3;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading uppercase tracking-tight;
+    @apply font-heading tracking-normal;
   }
 }
 
 @layer components {
-  .btn-neo {
-    @apply border-4 border-white bg-transparent px-6 py-3 font-heading font-bold text-xl uppercase hover:bg-white hover:text-black transition-none duration-0;
+  /* Wireframe card - Minimalist */
+  .card-dedsec {
+    @apply border border-neutral-800 bg-dedsec-black p-5 relative transition-all duration-100;
   }
   
-  .card-neo {
-    @apply border-4 border-neutral-800 bg-black p-6 hover:border-white transition-colors duration-0;
+  .card-dedsec:hover {
+    @apply border-neon-cyan shadow-[4px_4px_0px_0px_rgba(0,240,255,0.2)];
   }
 
-  .badge-neo {
-    @apply px-2 py-0.5 text-xs font-bold uppercase -rotate-2 inline-block border border-black;
+  /* Minimalist button */
+  .btn-dedsec {
+    @apply border border-white/20 bg-transparent px-4 py-2 font-mono text-sm uppercase text-light-gray hover:border-neon-cyan hover:text-neon-cyan hover:bg-neon-cyan/5 transition-colors duration-100;
   }
 }
 
@@ -36,22 +57,17 @@
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-neutral-900;
+  @apply bg-dedsec-black;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-neon-lime border-2 border-black;
+  @apply bg-neutral-800 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-hot-pink;
-}
-
-/* Glitch Animation Classes */
-.glitch-hover:hover {
-  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+  @apply bg-neon-cyan;
 }
