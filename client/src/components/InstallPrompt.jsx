@@ -6,7 +6,10 @@ const InstallPrompt = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    console.log("InstallPrompt: Component mounted"); // Debug log
+
     const handleBeforeInstallPrompt = (e) => {
+      console.log("InstallPrompt: beforeinstallprompt Event fired!"); // Debug log
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
@@ -42,7 +45,7 @@ const InstallPrompt = () => {
     <div className="fixed bottom-6 right-6 z-50 animate-[slide-up_0.5s_ease-out]">
       <button 
         onClick={handleInstallClick}
-        className="flex items-center gap-3 bg-neon-cyan/10 border border-neon-cyan text-neon-cyan px-4 py-3 font-mono text-xs hover:bg-neon-cyan hover:text-black transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)]"
+        className="flex items-center gap-3 bg-accent/10 border border-accent text-accent px-4 py-3 font-mono text-xs hover:bg-accent hover:text-primary transition-all shadow-[0_0_20px_var(--color-accent)]"
       >
         <Download size={16} />
         <div className="text-left">

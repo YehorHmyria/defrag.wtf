@@ -31,7 +31,6 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [activeTag, setActiveTag] = useState(null);
-  const [hideNoise, setHideNoise] = useState(false);
   const [view, setView] = useState('signal'); // 'signal' | 'trash' | 'logs'
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -129,9 +128,6 @@ function App() {
     if (view === 'logs') return savedArticles;
 
     let filtered = articles;
-    if (hideNoise) {
-      filtered = filtered.filter(a => a.impact_score >= 50);
-    }
     if (activeTag) {
       filtered = filtered.filter(a => a.short_tag === activeTag);
     }
@@ -163,7 +159,7 @@ function App() {
   const gridArticles = displayArticles.filter(a => a.id !== heroArticle?.id);
 
   return (
-    <div className="min-h-screen relative font-mono selection:bg-neon-cyan selection:text-black pb-24">
+    <div className="min-h-screen relative font-mono selection:bg-accent selection:text-black pb-24">
       {/* Centered Container */}
       <div className="container mx-auto px-4 max-w-6xl">
         <SearchModal 
@@ -181,27 +177,25 @@ function App() {
           ) : (
             <>
               <ControlBar 
-                hideNoise={hideNoise}
-                setHideNoise={setHideNoise}
                 activeTag={activeTag}
                 clearTag={() => setActiveTag(null)}
                 view={view}
                 setView={setView}
               />
               
-              {/* Error State (Only if API failed AND we are on Feed types) */}
+               {/* Error State (Only if API failed AND we are on Feed types) */}
               {error && articles.length === 0 && view !== 'logs' ? (
-                 <div className="flex flex-col items-center justify-center py-20 border border-hot-pink/50 bg-hot-pink/5">
-                   <h2 className="text-2xl font-heading text-hot-pink mb-2">SYSTEM CRITICAL_ERROR</h2>
-                   <p className="text-light-gray opacity-70 mb-6">[ {error} ]</p>
-                   <button onClick={() => fetchArticles(true)} className="btn-dedsec border-hot-pink text-hot-pink hover:bg-hot-pink hover:text-white">
+                 <div className="flex flex-col items-center justify-center py-20 border border-hot/50 bg-hot/5">
+                   <h2 className="text-2xl font-heading text-hot mb-2">SYSTEM CRITICAL_ERROR</h2>
+                   <p className="text-muted opacity-70 mb-6">[ {error} ]</p>
+                   <button onClick={() => fetchArticles(true)} className="btn-dedsec border-hot text-hot hover:bg-hot hover:text-white">
                      RETRY HANDSHAKE
                    </button>
                  </div>
               ) : (
                  <div className="space-y-12 animate-[fadeIn_0.5s_ease-out]">
                    {/* Status Line */}
-                   <div className="flex justify-between border-b border-dashed border-neutral-800 pb-2 text-xs text-neutral-600 uppercase tracking-widest">
+                   <div className="flex justify-between border-b border-dashed border-base-border pb-2 text-xs text-muted uppercase tracking-widest">
                      <span>Mode: {view === 'logs' ? 'OFFLINE_STORAGE' : view === 'trash' ? 'GARBAGE_COLLECTION' : 'LIVE_FEED'}</span>
                      <span>Packets: {displayArticles.length}</span>
                      <span>Filter: {activeTag || 'ALL'}</span>
@@ -209,9 +203,9 @@ function App() {
 
                    {/* Empty State for Logs */}
                    {view === 'logs' && savedArticles.length === 0 && (
-                     <div className="text-center py-32 border border-dashed border-neutral-800 rounded">
-                        <p className="text-neon-cyan mb-2 font-mono text-lg">{'>'} NO PACKETS CAPTURED.</p>
-                        <p className="text-neutral-500 font-mono text-sm">{'>'} RETURN TO MAIN FEED TO INITIATE DATA COLLECTION...</p>
+                     <div className="text-center py-32 border border-dashed border-base-border rounded">
+                        <p className="text-accent mb-2 font-mono text-lg">{'>'} NO PACKETS CAPTURED.</p>
+                        <p className="text-muted font-mono text-sm">{'>'} RETURN TO MAIN FEED TO INITIATE DATA COLLECTION...</p>
                      </div>
                    )}
 
@@ -250,13 +244,13 @@ function App() {
 
                    {/* Infinite Scroll Loader */}
                    {loadingMore && (
-                      <div className="py-8 text-center text-neon-cyan animate-pulse font-mono flex flex-col items-center">
+                      <div className="py-8 text-center text-accent animate-pulse font-mono flex flex-col items-center">
                          <span>[ SCANNING SECTORS... ]</span>
                       </div>
                    )}
                    
                    {!hasMore && view !== 'logs' && displayArticles.length > 0 && (
-                      <div className="py-8 text-center text-neutral-600 font-mono text-xs">
+                      <div className="py-8 text-center text-muted font-mono text-xs">
                          /// END OF BUFFER ///
                       </div>
                    )}

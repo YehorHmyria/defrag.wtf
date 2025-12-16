@@ -67,15 +67,15 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
       />
 
       {/* Modal Window */}
-      <div className="relative w-full max-w-2xl bg-dedsec-black border border-neon-cyan shadow-[0_0_30px_rgba(0,240,255,0.15)] flex flex-col overflow-hidden animate-[fadeIn_0.1s_ease-out]">
+      <div className="relative w-full max-w-2xl bg-primary border border-accent shadow-[0_0_30px_var(--color-accent)] flex flex-col overflow-hidden animate-[fadeIn_0.1s_ease-out]">
         
         {/* Header / Input */}
-        <div className="flex items-center px-4 py-4 border-b border-neutral-800">
-           <span className="text-neon-cyan mr-3 font-bold select-none">{'>'}</span>
+        <div className="flex items-center px-4 py-4 border-b border-base-border">
+           <span className="text-accent mr-3 font-bold select-none">{'>'}</span>
            <input 
              ref={inputRef}
              type="text"
-             className="flex-1 bg-transparent border-none outline-none text-white font-mono placeholder-neutral-600 text-lg"
+             className="flex-1 bg-transparent border-none outline-none text-main font-mono placeholder-muted text-lg"
              placeholder="Search database..."
              value={query}
              onChange={(e) => setQuery(e.target.value)}
@@ -88,7 +88,7 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
 
         {/* Filters / Quick Actions (Only show if no query yet) */}
         {query === '' && (
-          <div className="px-4 py-2 bg-neutral-900/50 text-[10px] text-neutral-500 font-mono tracking-widest border-b border-neutral-800">
+          <div className="px-4 py-2 bg-secondary text-[10px] text-muted font-mono tracking-widest border-b border-base-border">
             SUGGESTED: [HIGH IMPACT] [CVE] [LATEST]
           </div>
         )}
@@ -105,7 +105,7 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
                  <li 
                    key={article.id || index}
                    className={`px-4 py-3 flex items-center justify-between cursor-pointer transition-colors duration-75 
-                     ${index === selectedIndex ? 'bg-neon-cyan/10 border-l-2 border-neon-cyan' : 'border-l-2 border-transparent hover:bg-neutral-900'}`}
+                     ${index === selectedIndex ? 'bg-accent/10 border-l-2 border-accent' : 'border-l-2 border-transparent hover:bg-secondary'}`}
                    onClick={() => {
                      window.open(article.original_url, '_blank');
                      onClose();
@@ -113,22 +113,22 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
                    onMouseEnter={() => setSelectedIndex(index)}
                  >
                    <div className="flex-1 min-w-0 pr-4">
-                     <div className="flex items-center text-xs text-neutral-500 mb-1 font-mono">
+                     <div className="flex items-center text-xs text-muted mb-1 font-mono">
                         <span className="w-6 text-right mr-3 opacity-50">{(index + 1).toString().padStart(2, '0')}</span>
                         {article.short_tag && (
-                          <span className={`mr-2 px-1 text-[10px] border ${index === selectedIndex ? 'border-neon-cyan text-neon-cyan' : 'border-neutral-700 text-neutral-400'}`}>
+                          <span className={`mr-2 px-1 text-[10px] border ${index === selectedIndex ? 'border-accent text-accent' : 'border-base-border text-muted'}`}>
                             {article.short_tag}
                           </span>
                         )}
                         <span className="opacity-70">{new Date(article.published_at).toLocaleDateString()}</span>
                      </div>
-                     <h3 className={`font-mono truncate ${index === selectedIndex ? 'text-white' : 'text-gray-300'}`}>
+                     <h3 className={`font-mono truncate ${index === selectedIndex ? 'text-main' : 'text-muted'}`}>
                        {article.title}
                      </h3>
                    </div>
                    
                    {index === selectedIndex && (
-                     <CornerDownLeft className="w-4 h-4 text-neon-cyan animate-pulse" />
+                     <CornerDownLeft className="w-4 h-4 text-accent animate-pulse" />
                    )}
                  </li>
                ))}
@@ -137,7 +137,7 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
         </div>
 
         {/* Footer */}
-        <div className="px-4 py-2 bg-neutral-900 border-t border-neutral-800 text-[10px] text-neutral-600 flex justify-between font-mono">
+        <div className="px-4 py-2 bg-secondary border-t border-base-border text-[10px] text-muted flex justify-between font-mono">
            <span>ROOT@DEFRAG:~$ _</span>
            <span>{filteredArticles.length} RECORDS</span>
         </div>

@@ -12,11 +12,11 @@ const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) =
   });
 
   const getTagColor = (tag) => {
-    if (!tag) return 'text-bright-yellow';
+    if (!tag) return 'text-accent-secondary';
     const t = tag.toUpperCase();
-    if (['FAIL', 'CRASH', 'HACKED', 'LEAK'].includes(t)) return 'text-hot-pink';
-    if (['AI', 'LAUNCH', 'UPDATE', 'RELEASE', 'BENCHMARK'].includes(t)) return 'text-neon-cyan';
-    return 'text-bright-yellow';
+    if (['FAIL', 'CRASH', 'HACKED', 'LEAK'].includes(t)) return 'text-hot';
+    if (['AI', 'LAUNCH', 'UPDATE', 'RELEASE', 'BENCHMARK'].includes(t)) return 'text-accent';
+    return 'text-accent-secondary';
   };
 
   const bullets = summary.split('\n').filter(line => line.trim().length > 0).map(line => line.replace(/^[•\-\*]\s*/, ''));
@@ -24,7 +24,7 @@ const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) =
   return (
     <article className={`card-dedsec flex flex-col h-full group ${isHero ? 'md:col-span-2 lg:col-span-3 min-h-[350px]' : ''}`}>
       {/* Header */}
-      <div className="flex justify-between items-start mb-4 text-xs font-mono text-neutral-500">
+      <div className="flex justify-between items-start mb-4 text-xs font-mono text-muted">
         <div className="flex items-center gap-2">
           <span>{source_name}</span>
           <span>//</span>
@@ -43,7 +43,7 @@ const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) =
       </div>
 
       {/* Title */}
-      <h3 className={`font-heading leading-tight mb-4 text-white group-hover:text-neon-cyan transition-colors duration-200 ${isHero ? 'text-4xl md:text-5xl uppercase' : 'text-2xl'}`}>
+      <h3 className={`font-heading leading-tight mb-4 text-main group-hover:text-accent transition-colors duration-200 ${isHero ? 'text-4xl md:text-5xl uppercase' : 'text-2xl'}`}>
         <a href={original_url} target="_blank" rel="noopener noreferrer" className="before:absolute before:inset-0">
           {title}
         </a>
@@ -51,10 +51,10 @@ const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) =
 
       {/* Content */}
       <div className="flex-grow">
-        <ul className={`font-mono text-light-gray opacity-80 space-y-2 ${isHero ? 'text-lg' : 'text-sm'}`}>
+        <ul className={`font-mono text-muted opacity-80 space-y-2 ${isHero ? 'text-lg' : 'text-sm'}`}>
           {bullets.map((point, i) => (
             <li key={i} className="flex gap-2">
-              <span className="text-neutral-500">{'>'}</span>
+              <span className="text-muted">{'>'}</span>
               <span>{point}</span>
             </li>
           ))}
@@ -71,11 +71,11 @@ const ArticleCard = ({ article, isHero = false, onSave, isSaved, onTagClick }) =
                 e.preventDefault();
                 onSave && onSave(article);
               }}
-              className={`text-xs font-mono px-2 py-1 border transition-colors ${isSaved ? 'bg-neon-cyan text-black border-neon-cyan' : 'border-neutral-700 text-neutral-500 hover:border-neon-cyan hover:text-neon-cyan'}`}
+              className={`text-xs font-mono px-2 py-1 border transition-colors ${isSaved ? 'bg-accent text-primary border-accent' : 'border-base-border text-muted hover:border-accent hover:text-accent'}`}
             >
               [ {isSaved ? 'SAVED' : 'SAVE'} ]
             </button>
-            <div className="text-neon-cyan opacity-50 group-hover:opacity-100 transition-opacity">
+            <div className="text-accent opacity-50 group-hover:opacity-100 transition-opacity">
                 <ExternalLink size={16} />
             </div>
          </div>

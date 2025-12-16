@@ -5,8 +5,56 @@
 @tailwind utilities;
 
 @layer base {
+  /* DEDSEC (Default) */
+  :root {
+    --bg-primary: #09090b;
+    --bg-secondary: #000000;
+    --text-main: #ffffff;
+    --text-muted: #a3a3a3;
+    --border-base: #171717; /* neutral-900 */
+    --color-accent: #00f0ff; /* neon-cyan */
+    --color-secondary: #faff00; /* bright-yellow */
+    --color-hot: #ff003c; /* hot-pink */
+  }
+
+  /* INSTITUTE (Light) */
+  [data-theme="institute"] {
+    --bg-primary: #f3f4f6;
+    --bg-secondary: #ffffff;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --border-base: #e5e7eb;
+    --color-accent: #2563eb; /* deep blue */
+    --color-secondary: #000000;
+    --color-hot: #dc2626;
+  }
+
+  /* NIGHT SHIFT (Soft Dark) */
+  [data-theme="night_shift"] {
+    --bg-primary: #2e3440;
+    --bg-secondary: #242933;
+    --text-main: #d8dee9;
+    --text-muted: #808b9e;
+    --border-base: #434c5e;
+    --color-accent: #88c0d0; /* soft blue */
+    --color-secondary: #a3be8c; /* soft green */
+    --color-hot: #bf616a; /* soft red */
+  }
+
+  /* KERNEL PANIC (Hard Dark) */
+  [data-theme="kernel_panic"] {
+    --bg-primary: #050505;
+    --bg-secondary: #000000;
+    --text-main: #e5e5e5;
+    --text-muted: #737373;
+    --border-base: #333333;
+    --color-accent: #ff003c; /* Warning Red */
+    --color-secondary: #ffe600; /* Caution Yellow */
+    --color-hot: #ff0000;
+  }
+
   body {
-    @apply bg-dedsec-black text-white font-mono overflow-x-hidden;
+    @apply bg-primary text-main font-mono overflow-x-hidden transition-colors duration-300;
   }
 
   /* Subtler scanline overlay */
@@ -37,16 +85,16 @@
 @layer components {
   /* Wireframe card - Minimalist */
   .card-dedsec {
-    @apply border border-neutral-800 bg-dedsec-black p-5 relative transition-all duration-100;
+    @apply border border-base-border bg-primary p-5 relative transition-all duration-100;
   }
   
   .card-dedsec:hover {
-    @apply border-neon-cyan shadow-[4px_4px_0px_0px_rgba(0,240,255,0.2)];
+    @apply border-accent shadow-[4px_4px_0px_0px_var(--color-accent)];
   }
 
   /* Minimalist button */
   .btn-dedsec {
-    @apply border border-white/20 bg-transparent px-4 py-2 font-mono text-sm uppercase text-light-gray hover:border-neon-cyan hover:text-neon-cyan hover:bg-neon-cyan/5 transition-colors duration-100;
+    @apply border border-base-border bg-transparent px-4 py-2 font-mono text-sm uppercase text-muted hover:border-accent hover:text-accent hover:bg-accent/5 transition-colors duration-100;
   }
 }
 

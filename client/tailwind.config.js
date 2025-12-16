@@ -7,11 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        'dedsec-black': '#09090b',
-        'neon-cyan': '#00f0ff',
-        'hot-pink': '#ff003c',
-        'bright-yellow': '#faff00',
-        'light-gray': '#e5e7eb',
+        // Semantic Names
+        'primary': 'var(--bg-primary)', // Main background
+        'secondary': 'var(--bg-secondary)', // Card background (optional differentiation)
+        'main': 'var(--text-main)', // Main text
+        'muted': 'var(--text-muted)', // Muted text
+        'base-border': 'var(--border-base)', // Borders
+        'accent': 'var(--color-accent)', // Primary action/highlight
+        'accent-secondary': 'var(--color-secondary)',
+        'hot': 'var(--color-hot)',
+
+        // Legacy / Palette Mapping (Redirect to vars to allow theme switching)
+        'dedsec-black': 'var(--bg-primary)', 
+        'neon-cyan': 'var(--color-accent)',
+        'hot-pink': 'var(--color-hot)',
+        'bright-yellow': 'var(--color-secondary)',
+        'light-gray': 'var(--text-muted)',
       },
       fontFamily: {
         'heading': ['"VT323"', 'monospace'],

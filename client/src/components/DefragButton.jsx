@@ -42,13 +42,13 @@ const DefragButton = ({ onDefragComplete, secret }) => {
         fixed bottom-8 right-8 z-50
         w-14 h-14 rounded-full
         flex items-center justify-center
-        border border-neutral-700
-        bg-dedsec-black text-white
-        hover:border-neon-cyan hover:text-neon-cyan hover:rotate-90
+        border border-base-border
+        bg-primary text-main
+        hover:border-accent hover:text-accent hover:rotate-90
         focus:outline-none
         transition-all duration-300
-        ${loading ? 'animate-spin border-neon-cyan text-neon-cyan' : ''}
-        ${error ? 'border-hot-pink text-hot-pink hover:border-hot-pink hover:text-hot-pink' : ''}
+        ${loading ? 'animate-spin border-accent text-accent' : ''}
+        ${error ? 'border-hot text-hot hover:border-hot hover:text-hot' : ''}
       `}
       title="FORCE DEFRAG"
     >

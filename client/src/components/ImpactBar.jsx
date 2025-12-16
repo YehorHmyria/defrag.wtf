@@ -7,8 +7,8 @@ const ImpactBar = ({ score }) => {
   
   // Determine color scheme
   const isHighImpact = score >= 80;
-  const dotColor = isHighImpact ? 'bg-hot-pink' : 'bg-neon-cyan';
-  const textColor = isHighImpact ? 'text-hot-pink' : 'text-neon-cyan';
+  const dotColor = isHighImpact ? 'bg-hot' : 'bg-accent';
+  const textColor = isHighImpact ? 'text-hot' : 'text-accent';
 
   return (
     <div className="flex items-center gap-3 mt-4 font-mono text-xs select-none">
@@ -19,7 +19,7 @@ const ImpactBar = ({ score }) => {
             key={i} 
             className={`
               w-2 h-2 rounded-full transition-all duration-300
-              ${i < activeDots ? dotColor : 'bg-neutral-800'}
+              ${i < activeDots ? dotColor : 'bg-base-border'}
             `}
           />
         ))}
