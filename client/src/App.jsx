@@ -4,8 +4,21 @@ import GlitchHeader from './components/GlitchHeader';
 import ArticleCard from './components/ArticleCard';
 import DefragButton from './components/DefragButton';
 import LoadingState from './components/LoadingState';
+import BootLoader from './components/BootLoader';
+import SearchModal from './components/SearchModal';
 
 function App() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showBootLoader, setShowBootLoader] = useState(() => {
+    // Check session storage
+    const hasBooted = sessionStorage.getItem('hasBooted');
+    if (!hasBooted) {
+      sessionStorage.setItem('hasBooted', 'true');
+      return true;
+    }
+    return false; // Change to true to force show on every reload
+  });
+
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +39,20 @@ function App() {
   useEffect(() => {
     fetchArticles();
     const interval = setInterval(fetchArticles, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+
+    // Global Hotkey for Search
+    const handleGlobalKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleGlobalKeyDown);
+    };
   }, []);
 
   const heroArticle = articles.length > 0 
@@ -39,7 +65,14 @@ function App() {
     <div className="min-h-screen relative font-mono selection:bg-neon-cyan selection:text-black pb-24">
       {/* Centered Container */}
       <div className="container mx-auto px-4 max-w-6xl">
-        <GlitchHeader />
+        <SearchModal 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+          articles={articles} 
+        />
+        {showBootLoader && <BootLoader onComplete={() => setShowBootLoader(false)} />}
+        
+        <GlitchHeader onOpenSearch={() => setIsSearchOpen(true)} />
 
         <main className="mt-12">
           {loading ? (

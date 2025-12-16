@@ -66,29 +66,35 @@ const RSS_FEEDS = [
   { name: "TechCrunch", url: "https://techcrunch.com/feed/" },
   { name: "The Verge", url: "https://www.theverge.com/rss/index.xml" },
   { name: "Wired", url: "https://www.wired.com/feed/rss" },
-  { name: "Hacker News", url: "https://hnrss.org/frontpage" },
 ];
 
 // AI System Prompt - The "Vibe"
 // AI System Prompt - The "Vibe"
-const DEFRAG_SYSTEM_PROMPT = `You are Defrag.WTF, a cynical tech analyst AI. Your goal is to cut through PR and marketing BS. 
+const DEFRAG_SYSTEM_PROMPT = `
+Act as a cynical Senior Principal Engineer who hates marketing hype. 
+Your goal is "Signal-over-Noise".
 
-Analyze the input text and extract only hard technical facts. Output language must be strictly ENGLISH. Be direct, dry, and concise.
+Criteria for "Technical Density":
+- Penalize (-20 points): "Opinion", "Future of", "Predicts", "Could", "May", "Revolutionize", "Mainstream", "Game changer".
+- Reward (+20 points): "v1.0", "CVE-2024", "Released", "Benchmark", "Latency", "Deprecated", "Open Sourced".
 
-You MUST return ONLY valid JSON in this exact format (no markdown, no extra text):
+Evaluate the input news item. Return ONLY valid JSON in this format:
 {
-  "title": "Short, punchy headline in English (max 60 chars). No clickbait.",
+  "title": "Short, punchy headline (max 60 chars). No clickbait.",
   "summary": ["Fact point 1", "Fact point 2", "Fact point 3"],
-  "short_tag": "One English word in ALL CAPS (e.g. VAPORWARE, LAUNCH, LEAK, PATCH, HYPE, CRASH, AI, CRYPTO, FAIL)",
-  "impact_score": 85
+  "short_tag": "One English word in ALL CAPS (e.g. RELEASE, CVE, BENCHMARK, DEPRECATED, OUTAGE)",
+  "relevance_score": 0
 }
 
-Rules:
-- Title must be under 60 characters
-- Summary must be an array of 3 distinct string points
-- Short tag must be ONE word, ALL CAPS, in English
-- Impact score is 1-100 (1=trivial, 100=industry-changing)
-- If the article is mostly marketing fluff, make that clear in your analysis`;
+Scoring Rules (relevance_score 0-100):
+- 0: General trends, "AI is the future", opinion pieces, top 10 lists, tutorials, "becoming popular".
+- 20: Rumors, unverified leaks, "analysts predict".
+- 50: Minor bug fixes, corporate press releases without technical details.
+- 80: Major framework releases (e.g. React 19), new hardware specs, confirmed zero-day exploits.
+- 100: Paradigm-shifting releases (e.g. GPT-4, Linux Kernel major), massive global outages.
+
+CRITICAL: If the news is just a prediction or general observation, score it 0.
+`;
 
 /**
  * Scrapes full article content from a URL
@@ -186,12 +192,15 @@ async function defragmentWithAI(articleText, title, source) {
       defragmented.summary = defragmented.summary.map(s => `• ${s}`).join("\n");
     }
 
+    // Map relevance_score to impact_score for DB compatibility
+    defragmented.impact_score = defragmented.relevance_score || defragmented.impact_score;
+
     // Validate required fields
     if (
       !defragmented.title ||
       !defragmented.summary ||
       !defragmented.short_tag ||
-      !defragmented.impact_score
+      defragmented.impact_score === undefined
     ) {
       throw new Error("Missing required fields in AI response");
     }
@@ -199,10 +208,10 @@ async function defragmentWithAI(articleText, title, source) {
     // Validate data types
     if (
       typeof defragmented.impact_score !== "number" ||
-      defragmented.impact_score < 1 ||
+      defragmented.impact_score < 0 || // Allow 0
       defragmented.impact_score > 100
     ) {
-      throw new Error("Invalid impact_score");
+      throw new Error("Invalid relevance/impact_score");
     }
 
     return defragmented;
@@ -306,6 +315,11 @@ async function runDefragProcess() {
             console.log("   ❌ AI processing failed, skipping");
             errorCount++;
             continue;
+          }
+          // Filter by threshold (Strict Senior Engineer Mode)
+          if (defragmented.impact_score <= 65) {
+             console.log(`   🗑️  Skipping Noise: ${defragmented.title} [Score: ${defragmented.impact_score}]`);
+             continue;
           }
 
           // Insert into Supabase

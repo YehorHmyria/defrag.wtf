@@ -71,3 +71,28 @@
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-neon-cyan;
 }
+
+@layer utilities {
+  @keyframes slide-up {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+  }
+
+  /* Simple glitch skew effect */
+  @keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-2deg); }
+    40% { transform: skew(2deg); }
+    60% { transform: skew(-1deg); }
+    80% { transform: skew(1deg); }
+    100% { transform: skew(0deg); }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-in-out forwards;
+  }
+  
+  .animate-glitch {
+    animation: glitch-skew 0.3s infinite;
+  }
+}
