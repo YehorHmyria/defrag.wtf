@@ -185,7 +185,7 @@ function App() {
               
                {/* Error State (Only if API failed AND we are on Feed types) */}
               {error && articles.length === 0 && view !== 'logs' ? (
-                 <div className="flex flex-col items-center justify-center py-20 border border-hot/50 bg-hot/5">
+                 <div className="flex flex-col items-center justify-center py-20 border border-hot/50 bg-hot/10">
                    <h2 className="text-2xl font-heading text-hot mb-2">SYSTEM CRITICAL_ERROR</h2>
                    <p className="text-muted opacity-70 mb-6">[ {error} ]</p>
                    <button onClick={() => fetchArticles(true)} className="btn-dedsec border-hot text-hot hover:bg-hot hover:text-white">

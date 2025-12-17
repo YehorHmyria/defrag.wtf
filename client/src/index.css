@@ -94,7 +94,9 @@
 
   /* Minimalist button */
   .btn-dedsec {
-    @apply border border-base-border bg-transparent px-4 py-2 font-mono text-sm uppercase text-muted hover:border-accent hover:text-accent hover:bg-accent/5 transition-colors duration-100;
+     /* Avoid @apply with slash-notation (e.g. hover:bg-accent/5) which PostCSS/Tailwind can't resolve.
+       Use separate hover utilities instead. */
+     @apply border border-base-border bg-transparent px-4 py-2 font-mono text-sm uppercase text-muted hover:border-accent hover:text-accent hover:bg-accent hover:bg-opacity-5 transition-colors duration-100;
   }
 }
 
