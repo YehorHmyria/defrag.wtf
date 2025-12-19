@@ -1,131 +1,181 @@
-# Defrag.WTF Backend
+# Defrag.WTF
 
-A brutalist tech news aggregator that uses AI to strip marketing BS and leave only raw facts.
+**Defrag.WTF** is a brutalist tech‑news aggregator that defragments articles into raw, signal‑only facts. The project combines automated scraping, AI‑assisted summarization, and a minimalist React frontend.
 
-## Overview
+The repository is a **full‑stack monorepo**:
 
-This Node.js backend runs 24/7, scraping tech news from major sources and using Google Gemini AI to "defragment" articles—removing fluff and extracting hard technical facts for a global English-speaking audience.
+* **Backend**: Node.js + Express, scheduled ingestion, AI processing, Supabase persistence
+* **Frontend**: React (Vite) + Tailwind, PWA‑ready UI
+
+---
+
+## High‑Level Architecture
+
+1. RSS feeds and article pages are fetched from multiple tech news sources.
+2. Content is cleaned (HTML → text) and deduplicated.
+3. An LLM processes each article to remove marketing language and extract factual substance.
+4. Results are stored in Supabase.
+5. The React client consumes the API and renders a fast, minimal interface.
+
+---
 
 ## Features
 
-- 🤖 **AI-Powered Defragmentation**: Uses Google Gemini 1.5 Flash with a cynical analyst persona
-- 📰 **Multi-Source Aggregation**: TechCrunch, The Verge, Wired, Hacker News
-- ⏰ **Automated Scheduling**: Runs daily at 08:00 UTC via cron
-- 🗄️ **Supabase Storage**: Stores defragmented articles with deduplication
-- 🔧 **Manual Trigger**: On-demand processing via API endpoint
-- 🛡️ **Rate Limiting**: 5-second delays between AI requests
+### Backend
 
-## Setup
+* Automated RSS aggregation (TechCrunch, The Verge, Wired, Hacker News, etc.)
+* HTML scraping and content normalization (Cheerio)
+* AI‑powered "defragmentation" of articles
+* Scheduled daily ingestion via `node-cron`
+* Manual ingestion trigger via protected API endpoint
+* Supabase persistence with basic deduplication
+* Rate‑limited AI calls to avoid provider throttling
 
-### 1. Install Dependencies
+### Frontend
 
-```bash
-npm install
-```
+* React 19 + Vite
+* Tailwind CSS for a minimalist, brutalist aesthetic
+* Search and filtering UI
+* Impact / signal density indicators
+* Installable PWA (via `vite-plugin-pwa`)
+* Dark / light theme toggle
 
-### 2. Configure Environment
-
-Copy `.env.example` to `.env` and fill in your credentials:
-
-```bash
-cp .env.example .env
-```
-
-Required variables:
-
-- `SUPABASE_URL`: Your Supabase project URL
-- `SUPABASE_ANON_KEY`: Your Supabase anonymous key
-- `GEMINI_API_KEY`: Your Google Gemini API key
-- `DEFRAG_SECRET`: Secret key for manual triggers
-- `PORT`: Server port (default: 3000)
-
-### 3. Setup Database
-
-Execute `schema.sql` in your Supabase SQL editor to create the `defrag_articles` table.
-
-### 4. Start Server
-
-```bash
-npm start
-```
-
-For development with auto-reload:
-
-```bash
-npm run dev
-```
-
-## API Endpoints
-
-### Health Check
-
-```
-GET /health
-```
-
-Returns server status.
-
-### Manual Trigger
-
-```
-GET /api/defrag-now?secret=YOUR_SECRET
-```
-
-Triggers the defragmentation process immediately (runs in background).
-
-## Architecture
-
-### Data Flow
-
-1. **RSS Fetching**: Pulls feeds from configured sources
-2. **Content Scraping**: Extracts full article text using cheerio
-3. **AI Processing**: Sends to Gemini with defragmentation prompt
-4. **Storage**: Inserts validated results into Supabase
-
-### Database Schema
-
-Table: `defrag_articles`
-
-- `id` - UUID primary key
-- `title` - Cynical headline (max 60 chars)
-- `summary` - 3 bullet points of raw facts
-- `short_tag` - 1-word uppercase tag (HYPE, CRASH, AI, etc.)
-- `impact_score` - Technical significance (1-100)
-- `original_url` - Source URL (unique)
-- `source_name` - RSS feed source
-- `published_at` - Original publication date
-- `created_at` - Processing timestamp
-
-### AI Prompt Strategy
-
-The Gemini prompt enforces:
-
-- **Strict English output**
-- **Cynical, anti-hype tone**
-- **JSON-only responses**
-- **Factual technical analysis**
-- **Brutal honesty about vaporware**
-
-## Error Handling
-
-- ✅ Try/catch blocks around all async operations
-- ✅ Graceful skipping of failed articles
-- ✅ Duplicate detection (unique constraint on URL)
-- ✅ JSON validation for AI responses
-- ✅ Detailed console logging
-
-## Rate Limiting
-
-5-second delay between AI requests prevents hitting Gemini API limits. For high-volume runs, expect processing time of ~4-5 minutes for 50 articles.
+---
 
 ## Tech Stack
 
-- **Runtime**: Node.js (ES Modules)
-- **Server**: Express.js
-- **Database**: Supabase
-- **AI**: Google Gemini 1.5 Flash
-- **Scheduling**: node-cron
-- **Scraping**: rss-parser, axios, cheerio
+### Backend
+
+* Node.js (ES Modules)
+* Express
+* Supabase (`@supabase/supabase-js`)
+* AI providers:
+
+  * Groq SDK
+  * Google Generative AI
+* RSS & scraping: `rss-parser`, `axios`, `cheerio`
+* Scheduling: `node-cron`
+
+### Frontend
+
+* React 19
+* Vite
+* Tailwind CSS
+* Lucide Icons
+
+---
+
+## Repository Structure
+
+```
+.
+├── client/                 # Frontend (React + Vite)
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── vite.config.js
+│   └── tailwind.config.js
+│
+├── server.js               # Express backend entry point
+├── schema.sql              # Supabase database schema
+├── package.json            # Backend dependencies & scripts
+├── railway.json            # Railway deployment config
+└── README.md
+```
+
+---
+
+## Environment Variables
+
+The backend requires the following environment variables:
+
+```env
+PORT=3000
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+GROQ_API_KEY=your_groq_api_key
+DEFRAG_SECRET=secret_for_manual_triggers
+```
+
+---
+
+## Database Setup
+
+1. Create a Supabase project.
+2. Execute `schema.sql` in the Supabase SQL editor.
+3. Ensure row‑level security and API access are configured appropriately.
+
+---
+
+## Local Development
+
+### Backend
+
+```bash
+npm install
+npm run dev
+```
+
+The server starts on `http://localhost:3000` by default.
+
+### Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+The frontend runs on Vite’s default dev server and consumes the backend API.
+
+---
+
+## Build & Deployment
+
+### Production Build
+
+```bash
+npm run build
+```
+
+This installs dependencies and builds the client into static assets.
+
+### Deployment
+
+* Backend is compatible with Railway, Fly.io, Render, or similar Node.js platforms.
+* A `railway.json` file is included for Railway deployments.
+* Supabase is used as the hosted database.
+
+---
+
+## API Overview
+
+* `POST /api/defrag/run`
+
+  * Manually trigger article ingestion
+  * Requires `DEFRAG_SECRET`
+
+* `GET /api/articles`
+
+  * Fetch processed articles for the frontend
+
+(Exact routes and payloads are defined in `server.js`.)
+
+---
+
+## Design Philosophy
+
+Defrag.WTF intentionally avoids:
+
+* SEO‑optimized fluff
+* Marketing language
+* Opinion masquerading as facts
+
+The goal is to surface **what actually happened**, as efficiently as possible.
+
+---
 
 ## License
 
