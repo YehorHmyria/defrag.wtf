@@ -1,5 +1,7 @@
 # Defrag.WTF
 
+https://defrag.wtf/
+
 **Defrag.WTF** is a brutalist tech‑news aggregator that defragments articles into raw, signal‑only facts. The project combines automated scraping, AI‑assisted summarization, and a minimalist React frontend.
 
 The repository is a **full‑stack monorepo**:
