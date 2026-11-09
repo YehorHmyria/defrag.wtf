@@ -49,6 +49,7 @@ const EventCard = ({ event, lang = 'en', isHero = false, isSaved, onSave, onEnti
           )}
           <button className="chip" onClick={() => onTag?.(event.short_tag)} title="Filter by tag">#{event.short_tag}</button>
           <CredibilityBadge credibility={event.credibility} />
+          {event.articles.some((a) => a.meta?.mock) && <span className="chip border-dashed" title="Demo data, not real news">DEMO</span>}
           <span>{timeAgo(event.first_seen)}</span>
           {event.cve_ids?.slice(0, 2).map((c) => (
             <a key={c} className="chip border-hot/60 text-hot" href={`https://nvd.nist.gov/vuln/detail/${c}`} target="_blank" rel="noopener noreferrer">{c}</a>

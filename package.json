@@ -10,7 +10,8 @@
     "build": "cd client && npm install && npm run build",
     "test": "node --test",
     "eval:export": "node eval/export-sample.js",
-    "eval:run": "node eval/evaluate.js"
+    "eval:run": "node eval/evaluate.js",
+    "seed": "node scripts/seed.js"
   },
   "keywords": [
     "tech-news",

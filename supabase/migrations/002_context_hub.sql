@@ -18,6 +18,11 @@ ALTER TABLE defrag_articles
   ADD COLUMN IF NOT EXISTS meta           JSONB   NOT NULL DEFAULT '{}'::jsonb, -- e.g. HN points
   ADD COLUMN IF NOT EXISTS event_id       UUID;                       -- same real-world event => same event_id
 
+-- The deterministic scorer can legitimately return 0 (e.g. a pure opinion piece), but the original
+-- schema only allowed 1..100, so those inserts would fail. Allow 0..100.
+ALTER TABLE defrag_articles DROP CONSTRAINT IF EXISTS defrag_articles_impact_score_check;
+ALTER TABLE defrag_articles ADD CONSTRAINT defrag_articles_impact_score_check CHECK (impact_score >= 0 AND impact_score <= 100);
+
 -- Full-text search column (title weighted higher than summary).
 -- Generated columns require PostgreSQL 12+ (all current Supabase projects).
 ALTER TABLE defrag_articles

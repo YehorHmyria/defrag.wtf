@@ -108,6 +108,17 @@ See [`.env.example`](.env.example). Required: `SUPABASE_URL`, `SUPABASE_SERVICE_
 
 ---
 
+## Demo data (optional)
+
+To see the UI filled before the first real ingestion, load the fictional demo set (19 events, 45 articles over ~12 days,
+marked `DEMO` in the UI and `meta.mock = true` in the database):
+
+* **No keys needed:** paste [`supabase/seed.sql`](supabase/seed.sql) into the Supabase SQL Editor (run it after migration 002).
+* **Or from the CLI:** `npm run seed` (uses `.env`).
+* **Remove it later:** `npm run seed -- --clean` or `DELETE FROM defrag_articles WHERE meta->>'mock' = 'true';`
+
+---
+
 ## Local Development
 
 ### Backend

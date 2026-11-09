@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS defrag_articles (
   title TEXT NOT NULL,
   summary TEXT NOT NULL,
   short_tag TEXT NOT NULL,
-  impact_score SMALLINT NOT NULL CHECK (impact_score >= 1 AND impact_score <= 100),
+  impact_score SMALLINT NOT NULL CHECK (impact_score >= 0 AND impact_score <= 100),
   original_url TEXT NOT NULL UNIQUE,
   source_name TEXT NOT NULL,
   published_at TIMESTAMPTZ NOT NULL,

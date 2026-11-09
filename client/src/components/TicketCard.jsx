@@ -30,6 +30,7 @@ const TicketCard = ({ event, index = 1, lang, isSaved, onSave, onEntity }) => {
           <div className="mb-4 flex flex-wrap items-center gap-1.5">
             {event.event_type && <span className="chip">{TYPE_LABELS[event.event_type] || event.event_type}</span>}
             <CredibilityBadge credibility={event.credibility} />
+            {event.articles.some((a) => a.meta?.mock) && <span className="chip border-dashed" title="Demo data, not real news">DEMO</span>}
             {event.entities.slice(0, 3).map((e) => (
               <button key={e} className="chip" onClick={() => onEntity?.(e)}>{e}</button>
             ))}
