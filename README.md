@@ -116,6 +116,7 @@ marked `DEMO` in the UI and `meta.mock = true` in the database):
 * **No keys needed:** paste [`supabase/seed.sql`](supabase/seed.sql) into the Supabase SQL Editor (run it after migration 002).
 * **Or from the CLI:** `npm run seed` (uses `.env`).
 * **Remove it later:** `npm run seed -- --clean` or `DELETE FROM defrag_articles WHERE meta->>'mock' = 'true';`
+* **Real articles instead of fictional ones:** [`supabase/seed_real.sql`](supabase/seed_real.sql) holds 21 genuine articles fetched from the live sources (snapshot of 9 Nov 2026), with the LLM extraction step done by hand and the score/clustering computed by the real code. CLI: `npm run seed -- --real`; remove with `npm run seed -- --clean --real` or `DELETE FROM defrag_articles WHERE meta->>'sample' = 'real';`. Refresh the snapshot with `node scripts/fetch-real.js out.json` and edit `scripts/real-data.js`.
 
 ---
 

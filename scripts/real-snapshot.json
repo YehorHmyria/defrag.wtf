@@ -1,0 +1,230 @@
+[
+ {
+  "id": 3,
+  "source": "The Register",
+  "title": "Attackers backdoor trusted AWS integrations to steal secrets",
+  "url": "https://www.theregister.com/security/2026/11/09/attackers-backdoor-trusted-aws-integrations-to-steal-secrets/5308553",
+  "publishedAt": "2026-11-09T19:59:50.000Z",
+  "meta": {}
+ },
+ {
+  "id": 5,
+  "source": "Ars Technica",
+  "title": "Vulnerability that lets hackers SSH into Linux devices is under active exploitation",
+  "url": "https://arstechnica.com/security/2026/11/vulnerability-that-lets-hackers-ssh-into-linux-devices-is-under-active-exploitation/",
+  "publishedAt": "2026-11-09T19:41:34.000Z",
+  "meta": {}
+ },
+ {
+  "id": 6,
+  "source": "CISA KEV",
+  "title": "CVE-2026-102895: GPUStack Improper Authentication Vulnerability",
+  "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102895",
+  "publishedAt": "2026-11-09T00:00:00.000Z",
+  "meta": {},
+  "advisory": {
+   "cveID": "CVE-2026-102895",
+   "vendorProject": "GPUStack",
+   "product": "GPUStack",
+   "vulnerabilityName": "GPUStack Improper Authentication Vulnerability",
+   "dateAdded": "2026-11-09",
+   "shortDescription": "GPUStack contains an improper authentication vulnerability which could allow unauthenticated administrative access, including user and model changes, persistent administrator API-key creation, disclosure of worker and cloud-provider secrets, and code execution through POST /v2/inference-backends/from-yaml.",
+   "requiredAction": "Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+   "dueDate": "2026-11-12",
+   "knownRansomwareCampaignUse": "Unknown",
+   "forensicTriage": "Yes",
+   "notes": "This vulnerability affects an open-source component, third-party library, protocol, or proprietary implementation that could be used by different products. For more information, please see: ; https://github.com/gpustack/gpustack/security/advisories/GHSA-gj9m-f8ph-pmhr ; BOD 26-04: https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk ; Forensics Triage Requirements: https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk ; https://nvd.nist.gov/vuln/detail/CVE-2026-102895",
+   "cwes": [
+    "CWE-287",
+    "CWE-290",
+    "CWE-346"
+   ]
+  }
+ },
+ {
+  "id": 7,
+  "source": "GitHub Blog",
+  "title": "Beyond code generation: A developer’s guide to agentic engineering",
+  "url": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/",
+  "publishedAt": "2026-11-06T22:15:59.000Z",
+  "meta": {}
+ },
+ {
+  "id": 8,
+  "source": "Cloudflare Blog",
+  "title": "Launching the Vite Ecosystem Fund",
+  "url": "https://blog.cloudflare.com/launching-vite-ecosystem-fund/",
+  "publishedAt": "2026-11-09T13:00:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 9,
+  "source": "Lobsters",
+  "title": "Microsoft are rejecting your mail",
+  "url": "https://www.mythic-beasts.com/blog/2026/11/09/microsoft-are-rejecting-your-mail/",
+  "publishedAt": "2026-11-09T18:36:47.000Z",
+  "meta": {}
+ },
+ {
+  "id": 10,
+  "source": "BleepingComputer",
+  "title": "France blames Iranian hackers for supermarket attacks that sparked fires",
+  "url": "https://www.bleepingcomputer.com/news/security/france-blames-iranian-hackers-for-supermarket-attacks-that-sparked-fires/",
+  "publishedAt": "2026-11-09T18:32:42.000Z",
+  "meta": {}
+ },
+ {
+  "id": 12,
+  "source": "The Verge",
+  "title": "Apple’s $50 Intelligence Usage Packs extend access to some AI features",
+  "url": "https://www.theverge.com/tech/1030084/apple-intelligence-usage-packs-ai-features-creator-studio-logic-pro",
+  "publishedAt": "2026-11-09T19:09:58.000Z",
+  "meta": {}
+ },
+ {
+  "id": 14,
+  "source": "The Register",
+  "title": "Researchers pwn automakers’ Android apps to remotely unlock cars, honk horns",
+  "url": "https://www.theregister.com/security/2026/11/09/researchers-pwn-automakers-android-apps-to-remotely-unlock-cars-honk-horns/5308483",
+  "publishedAt": "2026-11-09T17:31:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 17,
+  "source": "Hacker News",
+  "title": "Claude Fable 5.2 and Mythos 5.2",
+  "url": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+  "publishedAt": "2026-11-09T18:56:29.000Z",
+  "meta": {
+   "hn_points": 687,
+   "hn_comments": 368,
+   "discussion": "https://news.ycombinator.com/item?id=50429906"
+  }
+ },
+ {
+  "id": 18,
+  "source": "CISA KEV",
+  "title": "CVE-2026-123158: OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability",
+  "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-123158",
+  "publishedAt": "2026-11-09T00:00:00.000Z",
+  "meta": {},
+  "advisory": {
+   "cveID": "CVE-2026-123158",
+   "vendorProject": "OpenBSD",
+   "product": "OpenSSH",
+   "vulnerabilityName": "OpenBSD OpenSSH Unexpected Status Code or Return Value Vulnerability",
+   "dateAdded": "2026-11-09",
+   "shortDescription": "OpenBSD OpenSSH on Linux contains an unexpected status code or return value vulnerability that could allow for authentication bypass.",
+   "requiredAction": "Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+   "dueDate": "2026-11-12",
+   "knownRansomwareCampaignUse": "Unknown",
+   "forensicTriage": "Yes",
+   "notes": "This vulnerability affects an open-source component, third-party library, protocol, or proprietary implementation that could be used by different products. For more information, please see: https://www.openssh.org/releasenotes.html ; https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/ ; https://github.com/openssh/openssh-portable/commit/4353fdc43ef646c43a8dda7025cc1a898caf1482 ; BOD 26-04: https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk ; Forensics Triage Requirements: https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk ; https://nvd.nist.gov/vuln/detail/CVE-2026-123158",
+   "cwes": [
+    "CWE-394"
+   ]
+  }
+ },
+ {
+  "id": 19,
+  "source": "The Verge",
+  "title": "Anthropic launches new Claude Fable and Mythos 5.2 models",
+  "url": "https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
+  "publishedAt": "2026-11-09T19:00:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 22,
+  "source": "InfoQ",
+  "title": "Google Releases Gemini 4 Argon for Robotics Control, Simulation, and Policy Improvement",
+  "url": "https://www.infoq.com/news/2026/11/google-gemini-argon/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+  "publishedAt": "2026-11-09T15:44:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 23,
+  "source": "BleepingComputer",
+  "title": "Russian cloud firm Beget rebuilds from scratch after data wiper attack",
+  "url": "https://www.bleepingcomputer.com/news/security/russian-cloud-firm-beget-rebuilds-from-scratch-after-data-wiper-attack/",
+  "publishedAt": "2026-11-09T17:50:32.000Z",
+  "meta": {}
+ },
+ {
+  "id": 25,
+  "source": "Ars Technica",
+  "title": "Claude Code is accidentally exposing secrets all over GitHub",
+  "url": "https://arstechnica.com/ai/2026/11/claude-code-settings-files-expose-thousands-of-secrets-on-github/",
+  "publishedAt": "2026-11-09T17:24:26.000Z",
+  "meta": {}
+ },
+ {
+  "id": 27,
+  "source": "InfoQ",
+  "title": "Cloudflare Develops Public Certificate Authority for Post-Quantum Web Security",
+  "url": "https://www.infoq.com/news/2026/11/cloudflare-merkle-certificates/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+  "publishedAt": "2026-11-09T14:35:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 30,
+  "source": "CISA KEV",
+  "title": "CVE-2026-116779: SignalWire FreeSwitch Code Injection Vulnerability",
+  "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-116779",
+  "publishedAt": "2026-11-09T00:00:00.000Z",
+  "meta": {},
+  "advisory": {
+   "cveID": "CVE-2026-116779",
+   "vendorProject": "SignalWire",
+   "product": "FreeSwitch",
+   "vulnerabilityName": "SignalWire FreeSwitch Code Injection Vulnerability",
+   "dateAdded": "2026-11-09",
+   "shortDescription": "SignalWire FreeSwitch contains a code injection vulnerability that permits configuration and credential disclosure, arbitrary call control, and command execution.",
+   "requiredAction": "Apply mitigations in accordance with vendor instructions, ensuring compliance with CISA’s BOD 26-04 Prioritizing Security Updates Based on Risk (see URL in Notes) guidance and CISA’s “Forensics Triage Requirements” (see URL in Notes). Follow applicable BOD 26-04 guidance for cloud services or discontinue use of the product if mitigations are unavailable. Stakeholders are responsible for evaluating each asset's internet exposure and ensuring adherence to BOD 26-04 patching guidelines.",
+   "dueDate": "2026-11-12",
+   "knownRansomwareCampaignUse": "Unknown",
+   "forensicTriage": "Yes",
+   "notes": "This vulnerability affects an open-source component, third-party library, protocol, or proprietary implementation that could be used by different products. For more information, please see: https://github.com/signalwire/freeswitch/security/advisories/GHSA-mg63-h38w-8p9p ; BOD 26-04: https://www.cisa.gov/news-events/directives/bod-26-04-prioritizing-security-updates-based-risk ; Forensics Triage Requirements: https://www.cisa.gov/news-events/directives/bod-26-04-implementation-guidance-prioritizing-security-updates-based-risk ; https://nvd.nist.gov/vuln/detail/CVE-2026-116779",
+   "cwes": [
+    "CWE-77",
+    "CWE-78",
+    "CWE-749"
+   ]
+  }
+ },
+ {
+  "id": 33,
+  "source": "TechCrunch",
+  "title": "Anthropic releases new Mythos and Fable models amid RSI concerns",
+  "url": "https://techcrunch.com/2026/11/09/anthropic-releases-new-mythos-and-fable-models-amid-rsi-concerns/",
+  "publishedAt": "2026-11-09T19:24:51.000Z",
+  "meta": {}
+ },
+ {
+  "id": 35,
+  "source": "BleepingComputer",
+  "title": "Binance denies data breach after alleged ShinyHunters claims",
+  "url": "https://www.bleepingcomputer.com/news/security/binance-denies-data-breach-after-alleged-shinyhunters-claims/",
+  "publishedAt": "2026-11-09T16:12:39.000Z",
+  "meta": {}
+ },
+ {
+  "id": 38,
+  "source": "InfoQ",
+  "title": "AWS Launches TorchNeuron to Run PyTorch Models on AWS Trainium Without Modifications",
+  "url": "https://www.infoq.com/news/2026/11/aws-torchneuron-trainium-pytorch/?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=global",
+  "publishedAt": "2026-11-09T11:00:00.000Z",
+  "meta": {}
+ },
+ {
+  "id": 39,
+  "source": "Hacker News",
+  "title": "DeepX claims inference up to 100B parameters at less than 5 W",
+  "url": "https://www.eetimes.com/deepx-tapes-out-second-gen-chip-projects-6-7x-performance-gain-with-lpddr5x-pim/",
+  "publishedAt": "2026-11-09T18:33:58.000Z",
+  "meta": {
+   "hn_points": 98,
+   "hn_comments": 12,
+   "discussion": "https://news.ycombinator.com/item?id=50429545"
+  }
+ }
+]
