@@ -2,10 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
+// PWA (service worker + manifest) is switched off. Set to true to re-enable it.
+const ENABLE_PWA = false
+
+const pwa = VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
@@ -39,6 +39,11 @@ export default defineConfig({
         enabled: true
       }
     })
+
+export default defineConfig({
+  plugins: [
+    react(),
+    ...(ENABLE_PWA ? [pwa] : []),
   ],
   server: {
     proxy: {
