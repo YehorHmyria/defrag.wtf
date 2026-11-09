@@ -16,7 +16,7 @@ const marker = real ? "sample" : "mock";
 const markerVal = real ? "real" : "true";
 const sqlFile = real ? "supabase/seed_real.sql" : "supabase/seed.sql";
 
-const q = (s) => `'${String(s).replace(/'/g, "''")}'`;
+const q = (s) => (s == null ? "NULL" : `'${String(s).replace(/'/g, "''")}'`);
 const arr = (a) => (a.length ? `ARRAY[${a.map(q).join(",")}]::text[]` : "'{}'::text[]");
 const json = (o) => `${q(JSON.stringify(o))}::jsonb`;
 
