@@ -34,7 +34,7 @@ if (arg === "--sql") {
 INSERT INTO defrag_articles (${cols})
 VALUES
 ${values.join(",\n")}
-ON CONFLICT (original_url) DO NOTHING;
+${real ? `ON CONFLICT (original_url) DO UPDATE SET\n${cols.split(",").filter((c) => c !== "original_url").map((c) => `  ${c} = EXCLUDED.${c}`).join(",\n")};` : "ON CONFLICT (original_url) DO NOTHING;"}
 `;
   fs.writeFileSync(sqlFile, sql);
   console.log(`Wrote ${sqlFile} (${rows.length} articles, ${new Set(rows.map((r) => r.event_id)).size} events)`);
@@ -58,7 +58,7 @@ const now = Date.now();
 const payload = rows.map(({ published_ago_min, ...r }) => ({ ...r, published_at: r.published_at ?? new Date(now - published_ago_min * 60000).toISOString() }));
 let inserted = 0;
 for (let i = 0; i < payload.length; i += 40) {
-  const { data, error } = await supabase.from("defrag_articles").upsert(payload.slice(i, i + 40), { onConflict: "original_url", ignoreDuplicates: true }).select("id");
+  const { data, error } = await supabase.from("defrag_articles").upsert(payload.slice(i, i + 40), { onConflict: "original_url", ignoreDuplicates: !real }).select("id");
   if (error) throw new Error(error.message);
   inserted += data?.length ?? 0;
 }

@@ -23,3 +23,4 @@ for (let i = 0; i < picked.length; i += 6) {
 }
 fs.writeFileSync(out, JSON.stringify(res, null, 1));
 console.log(`wrote ${res.length} items`);
+process.exit(0);
