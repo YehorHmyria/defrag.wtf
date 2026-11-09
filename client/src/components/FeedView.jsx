@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import EventCard from './EventCard';
+import TicketCard from './TicketCard';
+import AsciiBackdrop from './AsciiBackdrop';
 import LoadingState from './LoadingState';
 import { getEvents } from '../lib/api';
 import { TYPE_LABELS } from '../lib/format';
@@ -99,7 +101,20 @@ const FeedView = ({ stack, lang, saved, onSave, entity, setEntity }) => {
         </div>
       ) : (
         <div className="space-y-4 animate-[fadeIn_0.3s_ease-out]">
-          {hero && <EventCard event={hero} lang={lang} isHero isSaved={isSaved(hero)} onSave={onSave} onEntity={setEntity} onTag={setTag} />}
+          {hero && (
+            <section className="band-dark relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-14 sm:py-20 !my-10">
+              <AsciiBackdrop />
+              <div className="relative mx-auto max-w-6xl px-4">
+                <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                  <h2 className="font-heading text-4xl sm:text-5xl text-main">Top signal</h2>
+                  <p className="max-w-md text-[15px] leading-snug text-muted">
+                    The highest-impact event of the last {days === 1 ? '24 hours' : `${days} days`}, merged from every source that covered it.
+                  </p>
+                </div>
+                <TicketCard event={hero} lang={lang} isSaved={isSaved(hero)} onSave={onSave} onEntity={setEntity} />
+              </div>
+            </section>
+          )}
           {rest.map((e) => (
             <EventCard key={e.id} event={e} lang={lang} isSaved={isSaved(e)} onSave={onSave} onEntity={setEntity} onTag={setTag} />
           ))}

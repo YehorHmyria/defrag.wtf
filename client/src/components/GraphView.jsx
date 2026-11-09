@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 import LoadingState from './LoadingState';
+import EventMap from './EventMap';
+import AsciiBackdrop from './AsciiBackdrop';
 import { getGraph } from '../lib/api';
 import { useAsync } from '../lib/hooks';
 
 const W = 900, H = 560;
 const TYPE_COLOR = { TECH: 'rgb(var(--color-accent-rgb))', COMPANY: 'rgb(var(--color-secondary-rgb))', PRODUCT: 'rgb(var(--color-hot-rgb))', PERSON: 'rgb(var(--text-muted-rgb))' };
 
-const GraphView = ({ onOpenEntity, stack }) => {
+const GraphView = ({ onOpenEntity, stack, labels }) => {
   const [days, setDays] = useState(7);
   const { data, loading, error } = useAsync(() => getGraph({ days, min: days > 3 ? 2 : 1 }), [days]);
   const [layout, setLayout] = useState({ nodes: [], links: [] });
@@ -58,6 +60,11 @@ const GraphView = ({ onOpenEntity, stack }) => {
 
   return (
     <div>
+      <h2 className="font-heading text-3xl mb-1">Event map</h2>
+      <p className="mb-3 max-w-xl text-xs text-muted">Today's top events as hubs. Every dot is an article; a defrag head pulls the tangle into clusters.</p>
+      <EventMap labels={labels} className="mb-12 h-[420px]" />
+
+      <h2 className="font-heading text-3xl mb-1">Entity graph</h2>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
         <p className="text-xs text-muted max-w-xl">
           Entities extracted from the news, linked when they appear in the same event. Node size = number of events.
@@ -73,8 +80,9 @@ const GraphView = ({ onOpenEntity, stack }) => {
 
       {loading ? <LoadingState rows={2} /> : error ? <div className="text-hot text-center py-16">Graph unavailable.</div> :
        data.nodes.length === 0 ? <div className="text-center py-24 text-muted border border-dashed border-base-border">Not enough linked entities yet. Run an ingestion or widen the range.</div> : (
-        <div className="relative border border-base-border bg-secondary/40">
-          <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="w-full h-auto touch-none select-none" onPointerMove={onMove} role="img" aria-label="Entity relationship graph">
+        <div className="band-dark relative overflow-hidden border border-base-border">
+          <AsciiBackdrop opacity={0.05} />
+          <svg ref={svgRef} viewBox={`0 0 ${W} ${H}`} className="relative w-full h-auto touch-none select-none" onPointerMove={onMove} role="img" aria-label="Entity relationship graph">
             {layout.links.map((l, i) => {
               const a = l.source.id || l.source, b = l.target.id || l.target;
               if (!l.source.x) return null;

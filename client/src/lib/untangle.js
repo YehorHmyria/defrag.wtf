@@ -8,7 +8,7 @@
  * time = seconds, only drives the idle jitter of still-tangled nodes
  */
 
-function rng(seed) {
+export function rng(seed) {
   let a = seed >>> 0;
   return () => {
     a += 0x6d2b79f5;

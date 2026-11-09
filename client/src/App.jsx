@@ -9,22 +9,21 @@ import AskView from './components/AskView';
 import EventCard from './components/EventCard';
 import StackDrawer from './components/StackDrawer';
 import SearchModal from './components/SearchModal';
-import UntangleHero from './components/UntangleHero';
+import Hero from './components/Hero';
+import Splash from './components/Splash';
 import DefragButton from './components/DefragButton';
 import InstallPrompt from './components/InstallPrompt';
 import { useLocalStorage, useAsync } from './lib/hooks';
 import { getAlerts, getStats, getEvents } from './lib/api';
 import { normalizeSaved } from './lib/format';
 
+// Bottom-right floating tools (force-defrag button, PWA install toast): switched off, code kept.
+const SHOW_FLOATING_TOOLS = false;
+
 function App() {
-  // First visit of the session gets the full-screen intro; afterwards a compact banner.
-  const [firstVisit] = useState(() => {
-    try {
-      if (sessionStorage.getItem('hasBooted')) return false;
-      sessionStorage.setItem('hasBooted', 'true');
-      return true;
-    } catch { return false; }
-  });
+  // The splash (scribble -> ring -> ASCII wipe) plays on every page load, but never with reduced motion.
+  const [splash, setSplash] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const endSplash = useCallback(() => setSplash(false), []);
 
   const [tab, setTab] = useState(() => (window.location.hash.slice(1) || 'feed'));
   const [stack, setStack] = useLocalStorage('defrag_stack', []);
@@ -39,6 +38,10 @@ function App() {
   const statsQ = useAsync(getStats, []);
   const topQ = useAsync(() => getEvents({ type: 'signal', days: 2, sort: 'impact', limit: 9 }), []);
   const heroLabels = topQ.data?.events?.map((e) => e.entities[0] || e.short_tag).filter(Boolean);
+  const st = statsQ.data;
+  const ticker = st
+    ? `${st.events_24h} events today · ${st.signal_24h} high signal · ${st.sources_active}/${st.sources_total} sources live`
+    : 'Signal over noise · events, not articles';
   const radar = useAsync(() => (stack.length ? getAlerts({ stack }) : Promise.resolve({ alerts: [] })), [stack.join(',')]);
 
   useEffect(() => { window.location.hash = tab === 'feed' ? '' : tab; }, [tab]);
@@ -61,20 +64,21 @@ function App() {
 
   return (
     <div className="min-h-screen font-mono selection:bg-accent selection:text-black pb-24">
+      {splash && <Splash onDone={endSplash} />}
       <Header
           tab={tab} setTab={setTab} lang={lang} setLang={setLang}
           onOpenSearch={() => setSearchOpen(true)} onOpenStack={() => setStackOpen(true)}
-          stackCount={stack.length} savedCount={saved.length} radarCount={radar.data?.alerts?.length || 0}
+          stackCount={stack.length} savedCount={saved.length} radarCount={radar.data?.alerts?.length || 0} ticker={ticker}
       />
 
       {tab === 'feed' && (
-        <UntangleHero
-          stats={statsQ.data} labels={heroLabels} compact={!firstVisit}
+        <Hero
+          stats={statsQ.data}
           onEnter={() => document.getElementById('feed-start')?.scrollIntoView({ behavior: 'smooth' })}
         />
       )}
 
-      <div className="container mx-auto px-4 max-w-5xl">
+      <div className="container mx-auto px-4 max-w-6xl">
         <main className="mt-8" id="feed-start">
           {tab === 'feed' && (
             <>
@@ -85,7 +89,7 @@ function App() {
           {tab === 'radar' && (
             <RadarView radar={radar} stack={stack} lang={lang} saved={saved} onSave={toggleSave} onOpenStack={() => setStackOpen(true)} onEntity={openEntity} />
           )}
-          {tab === 'graph' && <GraphView stack={stack} onOpenEntity={openEntity} />}
+          {tab === 'graph' && <GraphView stack={stack} labels={heroLabels} onOpenEntity={openEntity} />}
           {tab === 'trends' && <TrendsView onOpenEntity={openEntity} />}
           {tab === 'ask' && <AskView />}
           {tab === 'saved' && (
@@ -102,8 +106,12 @@ function App() {
 
       <SearchModal isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} />
       <StackDrawer isOpen={isStackOpen} onClose={() => setStackOpen(false)} stack={stack} setStack={setStack} />
-      <DefragButton onDefragComplete={() => window.location.reload()} />
-      <InstallPrompt />
+      {SHOW_FLOATING_TOOLS && (
+        <>
+          <DefragButton onDefragComplete={() => window.location.reload()} />
+          <InstallPrompt />
+        </>
+      )}
     </div>
   );
 }

@@ -13,28 +13,54 @@
     --heading-tracking: normal;
   }
 
-  /* PAPER (default): warm paper, ink text, mono labels */
+  /* PAPER (default): tokens from the Content Architecture DESIGN.md.
+     canvas #F1EEE7, ink #232323, body #5B5A56, border #D8D6CF.
+     Accent is the site's #B27536 darkened to #94591D so small text passes 4.5:1 on canvas. */
   [data-theme="paper"] {
     --font-heading: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
     --heading-weight: 500;
-    --heading-tracking: -0.025em;
+    --heading-tracking: -0.02em;
     --bg-primary: #f1eee7;
     --bg-primary-rgb: 241 238 231;
-    --bg-secondary: #faf8f3;
-    --bg-secondary-rgb: 250 248 243;
+    --bg-secondary: #f7f5ef;
+    --bg-secondary-rgb: 247 245 239;
     --text-main: #232323;
     --text-main-rgb: 35 35 35;
-    --text-muted: #6b675f;
-    --text-muted-rgb: 107 103 95;
-    --border-base: #cfc9ba;
-    --border-base-rgb: 207 201 186;
-    --color-accent: #c2410c;
-    --color-accent-rgb: 194 65 12;
-    --color-secondary: #7a5c00;
-    --color-secondary-rgb: 122 92 0;
+    --text-muted: #5b5a56;
+    --text-muted-rgb: 91 90 86;
+    --border-base: #d8d6cf;
+    --border-base-rgb: 216 214 207;
+    --color-accent: #94591d;
+    --color-accent-rgb: 148 89 29;
+    --color-secondary: #5b5a56;
+    --color-secondary-rgb: 91 90 86;
     --color-hot: #b91c1c;
     --color-hot-rgb: 185 28 28;
+  }
+
+  /* INK: the dark variant derived in the DESIGN.md (gold accent #D6A878) */
+  [data-theme="ink"] {
+    --font-heading: "Geist", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+    --heading-weight: 500;
+    --heading-tracking: -0.02em;
+    --bg-primary: #110f0d;
+    --bg-primary-rgb: 17 15 13;
+    --bg-secondary: #1f1d1c;
+    --bg-secondary-rgb: 31 29 28;
+    --text-main: #fdfcfa;
+    --text-main-rgb: 253 252 250;
+    --text-muted: #a3a2a0;
+    --text-muted-rgb: 163 162 160;
+    --border-base: #373534;
+    --border-base-rgb: 55 53 52;
+    --color-accent: #d6a878;
+    --color-accent-rgb: 214 168 120;
+    --color-secondary: #c9b79c;
+    --color-secondary-rgb: 201 183 156;
+    --color-hot: #e5484d;
+    --color-hot-rgb: 229 72 77;
   }
 
   /* DEDSEC */
@@ -149,8 +175,8 @@
   .font-heading { font-weight: var(--heading-weight); letter-spacing: var(--heading-tracking); }
 
   /* Paper theme: no CRT scanlines, caps-mono labels feel */
-  [data-theme="paper"] body::after { display: none; }
-  [data-theme="paper"] .card-dedsec { @apply bg-secondary; }
+  [data-theme="paper"] body::after, [data-theme="ink"] body::after { display: none; }
+  [data-theme="paper"] .card-dedsec, [data-theme="ink"] .card-dedsec { @apply bg-secondary; }
 }
 
 @layer components {
@@ -241,8 +267,36 @@ input, textarea { cursor: text; }
   .ledger { @apply relative border border-dashed border-base-border bg-secondary/40; }
   .ledger-mark { @apply absolute text-[11px] leading-none text-muted select-none; }
 
+  /* Floating nav pill: plain charcoal body (the white dithered border was removed) */
+  .pill-dither {
+    border-radius: 14px;
+    background: #232323;
+    box-shadow: 0 10px 24px -8px rgba(0,0,0,.3);
+  }
+
+  /* Colour-blocked sections: a charcoal band inside a light page, and a light card inside a band */
+  .band-dark {
+    --bg-primary-rgb: 35 35 35; --bg-secondary-rgb: 43 41 40;
+    --text-main-rgb: 253 252 250; --text-muted-rgb: 163 162 160;
+    --border-base-rgb: 70 68 66; --color-accent-rgb: 214 168 120;
+    --color-secondary-rgb: 201 183 156; --color-hot-rgb: 229 72 77;
+    background: #232323; color: rgb(var(--text-main-rgb));
+  }
+  .paper-card {
+    --bg-primary-rgb: 241 238 231; --bg-secondary-rgb: 247 245 239;
+    --text-main-rgb: 35 35 35; --text-muted-rgb: 91 90 86;
+    --border-base-rgb: 216 214 207; --color-accent-rgb: 148 89 29;
+    background: #f1eee7; color: rgb(var(--text-main-rgb));
+  }
+
+  .btn-ink { @apply inline-flex items-center gap-2 bg-[#232323] px-4 py-2 text-[12px] uppercase text-white transition-colors; letter-spacing: 0.34px; }
+  .btn-ink:hover { background: #3a3835; }
+
   .scroll-x { overflow-x: auto; scrollbar-width: none; }
   .scroll-x::-webkit-scrollbar { display: none; }
 }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.animate-ticker { animation: ticker 38s linear infinite; }

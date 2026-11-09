@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const THEMES = [
-  { id: 'paper', label: 'PAPER' },
-  { id: 'dedsec', label: 'DEDSEC' },
-  { id: 'institute', label: 'INSTITUTE' },
-  { id: 'night_shift', label: 'NIGHT_SHIFT' },
-  { id: 'kernel_panic', label: 'KERNEL_PANIC' },
+// Legacy themes are kept in index.css but switched off (enabled: false), so they can't be selected.
+const ALL_THEMES = [
+  { id: 'paper', label: 'PAPER', enabled: true },
+  { id: 'ink', label: 'INK', enabled: true },
+  { id: 'dedsec', label: 'DEDSEC', enabled: false },
+  { id: 'institute', label: 'INSTITUTE', enabled: false },
+  { id: 'night_shift', label: 'NIGHT_SHIFT', enabled: false },
+  { id: 'kernel_panic', label: 'KERNEL_PANIC', enabled: false },
 ];
+const THEMES = ALL_THEMES.filter((t) => t.enabled);
 
 const ThemeToggle = () => {
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
@@ -14,11 +17,12 @@ const ThemeToggle = () => {
   useEffect(() => {
     // Load from local storage
     const savedTheme = localStorage.getItem('defrag_theme');
-    if (savedTheme) {
-      const index = THEMES.findIndex(t => t.id === savedTheme);
-      if (index !== -1) setCurrentThemeIndex(index);
+    const index = THEMES.findIndex(t => t.id === savedTheme);
+    if (index !== -1) {
+      setCurrentThemeIndex(index);
       document.documentElement.setAttribute('data-theme', savedTheme);
     } else {
+      // nothing saved, or a disabled legacy theme was saved earlier
       // Default
       document.documentElement.setAttribute('data-theme', 'paper');
     }
@@ -36,9 +40,9 @@ const ThemeToggle = () => {
   return (
     <button 
       onClick={cycleTheme}
-      className="text-xs font-mono text-muted hover:text-accent transition-colors select-none"
+      className="chip bg-primary/85 backdrop-blur select-none"
     >
-      [ THEME: {THEMES[currentThemeIndex].label} ]
+      THEME · {THEMES[currentThemeIndex].label}
     </button>
   );
 };
