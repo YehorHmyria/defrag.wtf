@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { searchArticles } from '../lib/api';
 import { Search, Command, CornerDownLeft } from 'lucide-react';
 
 /* 
@@ -7,16 +8,23 @@ import { Search, Command, CornerDownLeft } from 'lucide-react';
   - onClose: function
   - articles: array of { id, title, impact_score, original_url, short_tag }
 */
-const SearchModal = ({ isOpen, onClose, articles = [] }) => {
+const SearchModal = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
   
-  // Filter logic
-  const filteredArticles = articles.filter(article => 
-    article.title.toLowerCase().includes(query.toLowerCase()) || 
-    article.short_tag?.toLowerCase().includes(query.toLowerCase())
-  ).slice(0, 50); // Limit results for performance
+  // Server-side full-text search (debounced) over the last 30 days
+  const [found, setFound] = useState([]);
+  const filteredArticles = useMemo(() => (query.trim().length < 2 ? [] : found), [query, found]);
+  useEffect(() => {
+    const q = query.trim();
+    if (!isOpen || q.length < 2) return;
+    let cancelled = false;
+    const t = setTimeout(() => {
+      searchArticles(q).then((r) => !cancelled && setFound(r)).catch(() => !cancelled && setFound([]));
+    }, 250);
+    return () => { cancelled = true; clearTimeout(t); };
+  }, [query, isOpen]);
 
   // Reset selection when query changes
   useEffect(() => {
@@ -89,7 +97,7 @@ const SearchModal = ({ isOpen, onClose, articles = [] }) => {
         {/* Filters / Quick Actions (Only show if no query yet) */}
         {query === '' && (
           <div className="px-4 py-2 bg-secondary text-[10px] text-muted font-mono tracking-widest border-b border-base-border">
-            SUGGESTED: [HIGH IMPACT] [CVE] [LATEST]
+            TIP: supports phrases and operators, e.g. "zero day" -chrome  ·  last 30 days
           </div>
         )}
 

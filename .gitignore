@@ -3,3 +3,8 @@ node_modules/
 *.log
 .DS_Store
 *.md
+
+# evaluation artefacts (your annotation work; remove these lines to commit them)
+eval/labels.json
+eval/system.json
+eval/report.*

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const THEMES = [
+  { id: 'paper', label: 'PAPER' },
   { id: 'dedsec', label: 'DEDSEC' },
   { id: 'institute', label: 'INSTITUTE' },
   { id: 'night_shift', label: 'NIGHT_SHIFT' },
@@ -19,7 +20,7 @@ const ThemeToggle = () => {
       document.documentElement.setAttribute('data-theme', savedTheme);
     } else {
       // Default
-      document.documentElement.setAttribute('data-theme', 'dedsec');
+      document.documentElement.setAttribute('data-theme', 'paper');
     }
   }, []);
 

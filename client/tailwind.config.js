@@ -8,25 +8,25 @@ export default {
     extend: {
       colors: {
         // Semantic Names
-        'primary': 'var(--bg-primary)', // Main background
-        'secondary': 'var(--bg-secondary)', // Card background (optional differentiation)
-        'main': 'var(--text-main)', // Main text
-        'muted': 'var(--text-muted)', // Muted text
-        'base-border': 'var(--border-base)', // Borders
-        'accent': 'var(--color-accent)', // Primary action/highlight
-        'accent-secondary': 'var(--color-secondary)',
-        'hot': 'var(--color-hot)',
+        'primary': 'rgb(var(--bg-primary-rgb) / <alpha-value>)', // Main background
+        'secondary': 'rgb(var(--bg-secondary-rgb) / <alpha-value>)', // Card background (optional differentiation)
+        'main': 'rgb(var(--text-main-rgb) / <alpha-value>)', // Main text
+        'muted': 'rgb(var(--text-muted-rgb) / <alpha-value>)', // Muted text
+        'base-border': 'rgb(var(--border-base-rgb) / <alpha-value>)', // Borders
+        'accent': 'rgb(var(--color-accent-rgb) / <alpha-value>)', // Primary action/highlight
+        'accent-secondary': 'rgb(var(--color-secondary-rgb) / <alpha-value>)',
+        'hot': 'rgb(var(--color-hot-rgb) / <alpha-value>)',
 
         // Legacy / Palette Mapping (Redirect to vars to allow theme switching)
-        'dedsec-black': 'var(--bg-primary)', 
-        'neon-cyan': 'var(--color-accent)',
-        'hot-pink': 'var(--color-hot)',
-        'bright-yellow': 'var(--color-secondary)',
-        'light-gray': 'var(--text-muted)',
+        'dedsec-black': 'rgb(var(--bg-primary-rgb) / <alpha-value>)', 
+        'neon-cyan': 'rgb(var(--color-accent-rgb) / <alpha-value>)',
+        'hot-pink': 'rgb(var(--color-hot-rgb) / <alpha-value>)',
+        'bright-yellow': 'rgb(var(--color-secondary-rgb) / <alpha-value>)',
+        'light-gray': 'rgb(var(--text-muted-rgb) / <alpha-value>)',
       },
       fontFamily: {
-        'heading': ['"VT323"', 'monospace'],
-        'mono': ['"JetBrains Mono"', 'monospace'],
+        'heading': ['var(--font-heading)'],
+        'mono': ['var(--font-mono)'],
       },
       borderWidth: {
         '1': '1px',

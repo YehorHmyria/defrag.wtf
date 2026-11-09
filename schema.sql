@@ -26,3 +26,6 @@ COMMENT ON COLUMN defrag_articles.summary IS 'Raw, condensed facts as bullet poi
 COMMENT ON COLUMN defrag_articles.short_tag IS '1-word uppercase tag (e.g., HYPE, CRASH, AI, CRYPTO, FAIL)';
 COMMENT ON COLUMN defrag_articles.impact_score IS 'Technical significance rating from 1 to 100';
 COMMENT ON COLUMN defrag_articles.original_url IS 'Source article URL (unique constraint prevents duplicates)';
+
+-- NOTE: for the Context Hub columns (entities, event_id, fts, ...) also run
+-- supabase/migrations/002_context_hub.sql

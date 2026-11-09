@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { runIngest } from '../lib/api';
 import { RefreshCw, Power } from 'lucide-react';
 
 const DefragButton = ({ onDefragComplete, secret }) => {
@@ -19,7 +19,7 @@ const DefragButton = ({ onDefragComplete, secret }) => {
         return;
       }
 
-      await axios.get(`/api/defrag-now?secret=${defragSecret}`);
+      await runIngest(defragSecret);
       
       setTimeout(() => {
         if (onDefragComplete) onDefragComplete();
@@ -39,8 +39,8 @@ const DefragButton = ({ onDefragComplete, secret }) => {
       onClick={handleDefrag}
       disabled={loading}
       className={`
-        fixed bottom-8 right-8 z-50
-        w-14 h-14 rounded-full
+        fixed bottom-6 right-6 z-50
+        w-12 h-12 rounded-full
         flex items-center justify-center
         border border-base-border
         bg-primary text-main
