@@ -1,0 +1,18 @@
+/** Defrag mark: the letter D wound from a single thread, with the loose end curled at the bottom. */
+const LogoMark = ({ className = 'h-8 w-8', title = 'Defrag' }) => (
+  <svg className={className} viewBox="0 0 64 64" fill="none" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label={title}>
+    <rect width="64" height="64" rx="10" fill="#232323" />
+    <g stroke="#f1eee7" strokeWidth="1.5">
+      <path d="M20 10.5 V53.5" strokeWidth="2.4" />
+      <path d="M20.5 12 C41 7 59 19 54.5 35 C51 48 34 56.5 20.5 51.5" />
+      <path d="M20 13.5 C37 14 56 21 52 31.5 C48.5 44 36 52 20 50.5" />
+      <path d="M20 16 C36 12.5 52.5 23 49.5 33 C46 44.5 31 49 20 46.5" />
+      <path d="M20 18 C33 19.5 47.5 22.5 46.5 31 C45.5 40 34 46.5 20 43.5" />
+      <path d="M20 21 C30 19.5 43 26 42 31.5 C41 37 30 41.5 20 40.5" />
+      <path d="M22 9.5 C47 9 58.5 25 53 39 C48 50 37 55 23 54" strokeOpacity=".5" strokeWidth="1.2" />
+    </g>
+    <path d="M20 53.5 C16 59.5 6.5 58.5 8.5 51.5 C10.2 46 18.5 48 16.2 53 C14.8 56 10.5 54.5 12 51.2" stroke="#d6a878" strokeWidth="2" />
+  </svg>
+);
+
+export default LogoMark;
